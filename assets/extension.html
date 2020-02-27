@@ -1,0 +1,377 @@
+<style type="text/css">
+    body, html {
+    height: 100%;
+    margin: 0;
+    background: white;
+    font-family: helvetica;
+  }
+  ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 10px;
+    overflow: hidden;
+  }
+  li {
+    float: left;
+    display: block;
+    text-align: center;
+    padding: 6px;
+    padding-left: 10px;
+    margin-right: 7px;
+    margin-bottom:3px;
+    border-radius: 3px;
+    font-size: 10px;
+  }
+  p{
+    padding-left: 10px;
+    margin: 0px;
+  }
+  .selectBlock{
+    display: inline-block;
+    margin: 3px;
+    border-radius: 10px;
+    padding: 3px;
+    transition: background-color 0.5s ease;
+  }
+  .selectBlock:hover{
+    cursor: pointer;
+    background-color: #adcdff !important; 
+  }
+  .selected{
+    background-color: #82b1fa;
+    display: inline-block;
+    margin: 3px;
+    border-radius: 10px;
+    padding: 3px;
+    transition: background-color 0.5s ease;
+    color: white;
+  }
+  button.gen{
+    background-color: dodgerblue;
+    border: none;
+    padding: 7px;
+    border-radius: 15px;
+    color: white;
+    margin: 3px;
+    outline: none;
+    transition: background-color 0.5s ease;
+  }
+  button.gen:hover{
+    background-color: #d9d9d9;
+    color: black;
+  }
+
+.collapsible {
+  background-color: #555;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: background-color 0.5s ease;
+}
+
+.active,.collapsible:hover {
+  background-color: #555;
+}
+
+.collapsible:after {
+  content: '\002B';
+  color: white;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+}
+
+</style>
+
+<div class="sidebar">
+  <button class="collapsible" id="colordropdown">Select Theme</button>
+
+    <div class="content">
+     <div class="selectBlock" onclick="settheme(0)" id="1000">
+      <p>Sea Blue</p>
+      <ul id="0"></ul>
+     </div>
+
+    <div class="selectBlock" onclick="settheme(1)" id="1001">
+      <p>Dark</p>
+      <ul id="1"></ul>
+    </div>
+
+    <div class="selectBlock" onclick="settheme(2)" id="1002">
+      <p>Mint</p>
+      <ul id="2"></ul>
+    </div>
+
+    <div class="selectBlock" onclick="settheme(3)" id="1003">
+      <p>Mint Chip</p>
+      <ul id="3"></ul>
+    </div>
+
+    <div class="selectBlock" onclick="settheme(4)" id="1004">
+      <p>Rainbow</p>
+      <ul id="4"></ul>
+    </div>
+    <div class="selectBlock" onclick="settheme(5)" id="1005">
+      <p>Forest Green</p>
+      <ul id="5"></ul>
+    </div>
+    <div class="selectBlock" onclick="settheme(6)" id="1006">
+      <p>Appalachian Fall</p>
+      <ul id="6"></ul>
+    </div>
+    <div class="selectBlock" onclick="settheme(7)" id="1007">
+      <p>Pastel Sunset</p>
+      <ul id="7"></ul>
+    </div>
+    <div class="selectBlock" onclick="settheme(8)" id="1008">
+      <p>Pacific Fog</p>
+      <ul id="8"></ul>
+    </div>
+    <div class="selectBlock" onclick="settheme(9)" id="1009">
+      <p>Land Before Time</p>
+      <ul id="9"></ul>
+    </div>
+    <div class="selectBlock" onclick="settheme(10)" id="1010">
+      <p>Desert Stone</p>
+      <ul id="10"></ul>
+    </div>
+    <div class="selectBlock" onclick="settheme(11)" id="1011">
+      <p>Purple Night</p>
+      <ul id="11"></ul>
+    </div>
+   </div>
+  
+  <button class="collapsible" id="colordropdown">Options</button>
+
+  <div class="content">
+    <br>
+    <p>Rows (0 to 15): <input type="number" id="settings_rows" onchange="changerows()" min="1" max="15"></p>
+    <br>
+  </div>
+  <br>
+  <button class="gen" onclick="gen()"> Generate</button>
+  <button class="gen" onclick = "add()"> Add </button>
+  <button class="gen" onclick="insert()"> Insert As Image</button>
+  
+  
+  <br>
+  <br>
+  <p>Preview</p>
+  <canvas id="canvas" style="overflow: hidden;position: relative; border-style: none;"></canvas>
+  
+  
+  <script type="text/javascript">
+  
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.maxHeight){
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        } 
+      });
+    }
+    
+    var colors = [
+    ["#1976D2","#607D8B","#BBDEFB","#2196F3","#536DFE","#BDBDBD"],
+    ["#FE9400","#283339","#19272F","#32434A"],
+    ["#9cfdd2","#c4fce9","#dce9de","#1463f5","#6ab0fc","#6c73fc","#7094c9"],
+    ["#9cfda1","#9cfdd2","#283339","#19272F","#32434A"],
+    ["#B3E5FC","#0288D1","#0097A7","#D4E157","#43A047","#81C784","#FFEE58","#FF8F00","#E65100"],
+    ["#D4E157","#43A047","#537234","#81C784","#FFEE58"],
+    ["#fb4d18", "#bd2210","#e38839","#eda02b", "#753218","#cf9f42"],
+    ["#e88146","#fdc886","#cca3ab","#e9ac8f","#5f6595","#8d90bd","#b09fc1","#fdba00","#e55542"],
+    ["#767d85","#b4bab6","#838a90","#445660","#7185a6","#717d8d","#576872"],
+    ["#809342","#415019","#446c25","#385b59","#656462","#1c4922","#8392a5"],
+    ["#786c65","#d0b49d","#a78e58","#4e4118","#382812","#aa9788","#836b3a","#b9b66d","#8e883c","#584f4b","#21190b","#b8aaa4"],
+    ["#30308c","#040405","#1a1b66","#10114f","#090a38","#5c5c99"]
+    ];
+    
+    var colornames = [
+    "Sea Blue",
+    "Dark",
+    "Mint",
+    "Mint Chip",
+    "Rainbow",
+    "Forest Green",
+    "Appalachian Fall",
+    "Pastel Sunset",
+    "Pacific Fog",
+    "Land Before Time",
+    "Desert Stone",
+    "Purple Night"
+    ];
+
+    var lightdark = [1,0,0,0,0,0,1,1,1,1,1,1,]; //bimary array to get if text should be light or dark on theme 0 is dark, 1 light
+    
+     colorpal = Math.floor(Math.random()*colors.length); //selected colors
+     var img;
+     
+     
+     function settheme(num){
+      document.getElementById(1000+colorpal).classList.remove("selected");
+      document.getElementById(1000+colorpal).classList.add("selectBlock");
+      console.log("themeset");
+      document.getElementById(1000+num).classList.add("selected");
+      document.getElementById(1000+num).classList.remove("selectBlock");
+      drop = document.getElementById('colordropdown');
+      drop.innerText = "Select Theme | " + colornames[num];
+      drop.click();
+      drop.style.backgroundColor = colors[num][0];
+      drop.style.color = (lightdark[num] == 1) ? 'white' : 'black'; 
+
+      colorpal = num;
+      window.scrollTo(0,0);
+    }
+
+    
+    function displayThemes() {
+      for(var i = 0; i<colors.length; i++){
+
+      var ul = document.getElementById(i);
+
+        console.log(ul);
+        for(var a = 0; a<colors[i].length; a++){
+          console.log(a);
+          var li = document.createElement("li");
+          li.appendChild(document.createTextNode("P"));
+          li.style.backgroundColor = colors[i][a];
+          li.style.color= colors[i][a];
+          ul.appendChild(li);
+
+        }
+      }
+    }
+    displayThemes();
+
+    var times = Math.round(Math.random()*4+4);
+
+    function changerows(){
+      settings = document.getElementById("settings_rows")
+      times = settings.value;
+      if(times > 15){
+        settings.value = 15;
+      }
+      if(times<0){
+        settings.value = 0;
+      }
+      times = settings.value;
+    }
+
+    function gen(){
+    
+    var c = document.getElementById("canvas");
+    var ctx = c.getContext("2d");
+    
+    c.width = 640*2;
+    c.height = 360*2;
+    //first color is accent color/ best color
+   
+ //[["#FE9400","#283339","#19272F","#32434A"]];
+    
+    // ["#B3E5FC","#0288D1","#0097A7","#D4E157","#43A047","#81C784","#FFEE58","#FF8F00","#E65100"];
+    
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = "black";
+    // ctx.rotate((10+Math.random()*40)*Math.PI/180);
+    
+    //draw rect
+    //var width; //width of previous rectangle
+    ctx.rotate((10+Math.random()*40)*Math.PI/180);
+    
+    ctx.fillStyle = colors[colorpal][Math.floor(Math.random()*colors[colorpal].length)];
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    
+    
+    var preX = 0; // x val of previous rectangle
+    for(i = 0; i<times; i++){
+    var cw;
+    if(Math.random()>0.5){
+    cw = (c.width/times)+(Math.random()*(c.width/(times)));
+    }
+    else{
+    cw = (c.width/times)-(Math.random()*(c.width/(times*3)));
+    }
+    
+    var color = colors[colorpal][Math.floor(Math.random()*colors[colorpal].length)];
+    
+    ctx.fillStyle = color//random colors
+    ctx.fillRect(preX, -1000, cw, 10000);
+    preX = preX+cw;
+    }
+    
+    
+    
+    
+    if(Math.random()>0.5){
+    ctx.fillStyle = colors[Math.round(Math.random()*colors.length)]; //random color
+    ctx.fillRect(c.width-Math.random()*(c.width)-100, -2000, 50000, 2000);
+    }
+    else{
+     ctx.fillStyle = colors[colorpal][0]; //random color
+     var yVal = Math.random() < 0.5 ? c.height : 0;
+      if(yVal>0){ //bottom circle
+        var xVal = Math.random() < 0.5 ? c.width/3 : c.width-c.width/6;
+        ctx.moveTo(xVal,yVal);
+        ctx.arc(xVal, yVal, Math.random()*100+500, 0, 2 * Math.PI);
+        ctx.fill(); 
+      }
+      else{
+          var xVal = Math.random() < 0.5 ? c.width/4 : c.width-c.width/6;
+          ctx.moveTo(xVal,yVal);
+          ctx.arc(xVal, yVal, Math.random()*100+400, 0, 2 * Math.PI);
+          ctx.fill(); 
+      }
+
+    }
+    
+    
+    img = c.toDataURL("image/png");
+//document.write('<img src="'+img+'"/>');
+    
+    //google.script.run.insertGoogleMap(img);
+    
+   // google.script.run.addImageSlide('https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png');
+   img = img.substring(22);
+       console.log(""+img);
+
+    google.script.run.addImageSlide(img);
+//    console.log(imgStore);
+    }
+    
+    function insert(){
+    google.script.run.addImage(img);
+    }
+    
+    function add(){
+    google.script.run.addImageSlide(img);
+    }
+    
+    //data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==
+  </script>
+  
+
+</div>
