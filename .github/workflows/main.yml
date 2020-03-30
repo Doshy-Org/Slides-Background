@@ -1,0 +1,14 @@
+on: [push]
+
+jobs:
+  owo_job:
+    runs-on: ubuntu-latest
+    name: A job to owo at you
+    steps:
+    - name: owo action step
+      id: owo
+      uses: phisv/crispy-octo-spork@master
+      with:
+        who-to-owo: 'Google Slides'
+    - name: output time
+      run: echo "The time was ${{ steps.owo.outputs.time }}"
