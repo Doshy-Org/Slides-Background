@@ -1,14 +1,14 @@
 on: [push]
 
 jobs:
-  owo_job:
+  message:
     runs-on: ubuntu-latest
-    name: A job to owo at you
+    name: Encouraging message
     steps:
-    - name: owo action step
-      id: owo
+    - name: action step
+      id: message
       uses: phisv/crispy-octo-spork@master
       with:
-        who-to-owo: 'Google Slides'
+        user: 'Slides Background'
     - name: output time
-      run: echo "The time was ${{ steps.owo.outputs.time }}"
+      run: echo "The time was ${{ steps.message.outputs.time }}"
