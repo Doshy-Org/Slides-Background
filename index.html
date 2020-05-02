@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <title>Doshy - Slides Background</title>
-    <meta name=”viewport” content=”width=device-width, initial-scale=1″>
+   <meta name="viewport" content="width=device-width,maximum-scale=0.9" />
     <link rel="stylesheet" type="text/css" href="assets/main.css">
     <link rel="icon" href="assets/profile.png" type="image/gif" sizes="16x16">
     <meta name="google-site-verification" content="ok6ySg_qj0ACj-mIQVG76q0EzsoDaqr99QZ11eJicjw" />
 </head>
     
 <body>
-  <ul id="nav">
+  <ul class = "nav" id="nav">
     <li class="disabled">Doshy</li>
     <li class="selected"><a href="index.html" class="navlink">Slides Background</a></li>
     <li><a href="privacypolicy.html" class="navlink">Privacy Policy</a></li>
@@ -37,7 +37,56 @@
         <p style="text-align: left; font-size: 1.6em;">10+ Unique Themes To Choose From</p>
         <br>
         <br>
-        <img align="left" src="assets/colors.png">
+      <div class="selectBlock" onclick="settheme(0)" id="1000">
+        <p>Sea Blue</p>
+        <ul class = "color" id="0"></ul>
+      </div>
+      <div class="selectBlock" onclick="settheme(1)" id="1001">
+        <p>Dark</p>
+        <ul class = "color" id="1"></ul>
+      </div>
+
+      <div class="selectBlock" onclick="settheme(2)" id="1002">
+        <p>Mint</p>
+        <ul class = "color" id="2"></ul>
+      </div>
+
+      <div class="selectBlock" onclick="settheme(3)" id="1003">
+        <p>Mint Chip</p>
+        <ul class = "color" id="3"></ul>
+      </div>
+      <div class="selectBlock" onclick="settheme(4)" id="1004">
+        <p>Rainbow</p>
+        <ul class = "color" id="4"></ul>
+      </div>
+      <div class="selectBlock" onclick="settheme(5)" id="1005">
+        <p>Forest Green</p>
+        <ul class = "color" id="5"></ul>
+      </div>
+      <div class="selectBlock" onclick="settheme(6)" id="1006">
+        <p>Appalachian Fall</p>
+        <ul class = "color" id="6"></ul>
+      </div>
+      <div class="selectBlock" onclick="settheme(7)" id="1007">
+        <p>Pastel Sunset</p>
+        <ul class = "color" id="7"></ul>
+      </div>
+      <div class="selectBlock" onclick="settheme(8)" id="1008">
+        <p>Pacific Fog</p>
+        <ul class = "color" id="8"></ul>
+      </div>
+      <div class="selectBlock" onclick="settheme(9)" id="1009">
+        <p>Land Before Time</p>
+        <ul class = "color" id="9"></ul>
+      </div>
+      <div class="selectBlock" onclick="settheme(10)" id="1010">
+        <p>Desert Stone</p>
+        <ul class = "color" id="10"></ul>
+      </div>
+      <div class="selectBlock" onclick="settheme(11)" id="1011">
+        <p>Purple Night</p>
+        <ul class = "color" id="11"></ul>
+      </div>
       </div>
     </div>
 
@@ -56,7 +105,42 @@
     <br>
     <br>
   </center>
- 
 
 </body>
+<script type="text/javascript">
+  var colors = [
+    ["#1976D2","#607D8B","#BBDEFB","#2196F3","#536DFE","#BDBDBD"],
+    ["#FE9400","#283339","#19272F","#32434A"],
+    ["#9cfdd2","#c4fce9","#dce9de","#1463f5","#6ab0fc","#6c73fc","#7094c9"],
+    ["#9cfda1","#9cfdd2","#283339","#19272F","#32434A"],
+    ["#B3E5FC","#0288D1","#0097A7","#D4E157","#43A047","#81C784","#FFEE58","#FF8F00","#E65100"],
+    ["#D4E157","#43A047","#537234","#81C784","#FFEE58"],
+    ["#fb4d18", "#bd2210","#e38839","#eda02b", "#753218","#cf9f42"],
+    ["#e88146","#fdc886","#cca3ab","#e9ac8f","#5f6595","#8d90bd","#b09fc1","#fdba00","#e55542"],
+    ["#767d85","#b4bab6","#838a90","#445660","#7185a6","#717d8d","#576872"],
+    ["#809342","#415019","#446c25","#385b59","#656462","#1c4922","#8392a5"],
+    ["#786c65","#d0b49d","#a78e58","#4e4118","#382812","#aa9788","#836b3a","#b9b66d","#8e883c","#584f4b","#21190b","#b8aaa4"],
+    ["#30308c","#040405","#1a1b66","#10114f","#090a38","#5c5c99"]
+    ];
+
+  function displayThemes() {
+      for(var i = 0; i<colors.length; i++){
+
+      var ul = document.getElementById(i);
+
+        console.log(ul);
+        for(var a = 0; a<colors[i].length; a++){
+          console.log(a);
+          var li = document.createElement("li");
+          li.appendChild(document.createTextNode("P"));
+          li.style.backgroundColor = colors[i][a];
+          li.style.color= colors[i][a];
+          ul.appendChild(li);
+
+        }
+      }
+    }
+    displayThemes();
+
+</script>
 </html>
