@@ -20,7 +20,7 @@ body, html {
     z-index: 99;
     transition: 0.3s;
   }
-  li{
+  li.nav{
     float:left;
     display: block;
     color: black;
@@ -29,7 +29,7 @@ body, html {
     font-size: 1em;
     padding: 10px;
   }
-  li a{
+  li.nav a{
     text-decoration: none;
     color: black;
   }
@@ -37,7 +37,7 @@ body, html {
     background-color: white !important; 
     color: black !important;
   }
-  li:hover{
+  li.nav:hover{
     background-color: #FE9400;
     color: white;
   }
@@ -71,6 +71,12 @@ body, html {
   .top3{
     padding: 20px;
     background-image: url('3.png');
+    background-size: cover;
+    overflow: hidden;
+  }
+  .top4{
+    padding: 20px;
+    background-image: url('4.png');
     background-size: cover;
     overflow: hidden;
   }
@@ -207,5 +213,9 @@ body, html {
 .list:hover{
     background-color: #d9d9d9;
     color: black;
-  
+}
+
+ul.bullets > li{
+  font-size: 1.2em;
+  padding: 0.6%;
 }
