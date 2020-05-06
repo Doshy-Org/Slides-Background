@@ -102,7 +102,6 @@
 
 <div class="sidebar">
   <button class="collapsible" id="colordropdown">Select Theme</button>
-
     <div class="content">
      <div class="selectBlock" onclick="settheme(0)" id="1000">
       <p>Sea Blue</p>
@@ -156,13 +155,35 @@
       <p>Purple Night</p>
       <ul id="11"></ul>
     </div>
+    <div class="selectBlock" onclick="settheme(12)" id="1012">
+      <p>Desert Noon</p>
+      <ul id="12"></ul>
+    </div>
+    <div class="selectBlock" onclick="settheme(13)" id="1013">
+      <p>Desert Sunset</p>
+      <ul id="13"></ul>
+    </div>
+     <div class="selectBlock" onclick="settheme(14)" id="1014">
+      <p>Misty Morning</p>
+      <ul id="14"></ul>
+    </div>
+    <div class="selectBlock" onclick="settheme(15)" id="1015">
+      <p>Summer Day</p>
+      <ul id="15"></ul>
+    </div>
    </div>
   
   <button class="collapsible" id="colordropdown">Options</button>
 
+  <br>
+  <br>
+  <p>Preview - Right Click To Download</p>
   <div class="content">
     <br>
     <p>Rows (0 to 15): <input type="number" id="settings_rows" onchange="changerows()" min="1" max="15"></p>
+    <br>
+    <br>
+    <p>Gray Overlay (0 to 1): <input type="number" step="0.01" id="settings_overlay" onchange="setoverlay()" min="0" max="1"></p>
     <br>
   </div>
   <br>
@@ -173,7 +194,7 @@
   
   <br>
   <br>
-  <p>Preview- Right Click To Download</p>
+  <p>Preview</p>
   <canvas id="canvas" style="overflow: hidden;position: relative; border-style: none;"></canvas>
   
   
@@ -201,12 +222,16 @@
     ["#9cfda1","#9cfdd2","#283339","#19272F","#32434A"],
     ["#B3E5FC","#0288D1","#0097A7","#D4E157","#43A047","#81C784","#FFEE58","#FF8F00","#E65100"],
     ["#D4E157","#43A047","#537234","#81C784","#FFEE58"],
-    ["#fb4d18", "#bd2210","#e38839","#eda02b", "#753218","#cf9f42"],
+    ["#fb4d18","#bd2210","#e38839","#eda02b","#753218","#cf9f42"],
     ["#e88146","#fdc886","#cca3ab","#e9ac8f","#5f6595","#8d90bd","#b09fc1","#fdba00","#e55542"],
     ["#767d85","#b4bab6","#838a90","#445660","#7185a6","#717d8d","#576872"],
     ["#809342","#415019","#446c25","#385b59","#656462","#1c4922","#8392a5"],
     ["#786c65","#d0b49d","#a78e58","#4e4118","#382812","#aa9788","#836b3a","#b9b66d","#8e883c","#584f4b","#21190b","#b8aaa4"],
-    ["#30308c","#040405","#1a1b66","#10114f","#090a38","#5c5c99"]
+    ["#30308c","#040405","#1a1b66","#10114f","#090a38","#5c5c99"],
+    ["#F58D47","#FDAC40","#DD8002","#CF7803","#F4AC4A","#FFFF00","#FDA42B"],
+    ["#CF0E43","#BD0D3E","#A40B35","#8E092E","#760726","#970606","#630D84"],
+    ["#F2D8BC","#FDF6D8","#D1BEA2","#B8A797","#BEB5AB","#8D877B","#9A9087","#BBB7AB","#C1C5C5","#989994"],
+    ["#97CFFF","#658DC6","#76A8D8","#D8EC7E","#95B453","#C5D762","#D9E4EE","#E0E3E6","#8BBFFE"]
     ];
     
     var colornames = [
@@ -221,10 +246,14 @@
     "Pacific Fog",
     "Land Before Time",
     "Desert Stone",
-    "Purple Night"
+    "Purple Night",
+    "Desert Noon",
+    "Desert Sunset",
+    "Misty Morning",
+    "Summer Day"
     ];
 
-    var lightdark = [1,0,0,0,0,0,1,1,1,1,1,1,]; //bimary array to get if text should be light or dark on theme 0 is dark, 1 light
+    var lightdark = [1,0,0,0,0,0,1,1,1,1,1,1,0,1,0,0]; //bimary array to get if text should be light or dark on theme 0 is dark, 1 light
     
      colorpal = Math.floor(Math.random()*colors.length); //selected colors
      var img;
@@ -252,9 +281,7 @@
 
       var ul = document.getElementById(i);
 
-        console.log(ul);
         for(var a = 0; a<colors[i].length; a++){
-          console.log(a);
           var li = document.createElement("li");
           li.appendChild(document.createTextNode("P"));
           li.style.backgroundColor = colors[i][a];
@@ -267,9 +294,15 @@
     displayThemes();
 
     var times = Math.round(Math.random()*4+4);
+    var overlay = 0.0;
 
     function changerows(){
       settings = document.getElementById("settings_rows")
+      if(settings.value== "")
+      {
+        times = Math.round(Math.random()*4+4);
+        return;
+      }
       times = settings.value;
       if(times > 15){
         settings.value = 15;
@@ -279,6 +312,23 @@
       }
       times = settings.value;
     }
+    function setoverlay(){
+      settings = document.getElementById("settings_overlay")
+      if(settings.value== "")
+      {
+        overlay = 0.0;
+        return;
+      }
+      overlay = settings.value;
+      if(overlay > 1){
+        settings.value = 1.0;
+      }
+      if(overlay<0){
+        settings.value = 0.0;
+      }
+      overlay = settings.value;
+//      console.log('overlay'+settings.value+typeof(settings.value));
+    }
 
     function gen(){
     
@@ -287,6 +337,7 @@
     
     c.width = 640*2;
     c.height = 360*2;
+    ctx.save();
     //first color is accent color/ best color
    
  //[["#FE9400","#283339","#19272F","#32434A"]];
@@ -294,7 +345,7 @@
     // ["#B3E5FC","#0288D1","#0097A7","#D4E157","#43A047","#81C784","#FFEE58","#FF8F00","#E65100"];
     
     ctx.shadowBlur = 20;
-    ctx.shadowColor = "black";
+    ctx.shadowColor = "rgba(0,0,0,0.85)";
     // ctx.rotate((10+Math.random()*40)*Math.PI/180);
     
     //draw rect
@@ -319,7 +370,7 @@
     var color = colors[colorpal][Math.floor(Math.random()*colors[colorpal].length)];
     
     ctx.fillStyle = color//random colors
-    ctx.fillRect(preX, -1000, cw, 10000);
+    ctx.fillRect(preX, -1000, 10000, 10000);
     preX = preX+cw;
     }
     
@@ -347,7 +398,10 @@
       }
 
     }
-    
+    //gray overlay
+    ctx.restore();
+    ctx.fillStyle = 'rgba(255,255,255,'+overlay+')';
+    ctx.fillRect(0,0,c.width,c.height);
     
     img = c.toDataURL("image/png");
 //document.write('<img src="'+img+'"/>');
@@ -356,7 +410,7 @@
     
    // google.script.run.addImageSlide('https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png');
    img = img.substring(22);
-       console.log(""+img);
+  
 
     google.script.run.addImageSlide(img);
 //    console.log(imgStore);
