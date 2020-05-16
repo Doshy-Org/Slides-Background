@@ -175,26 +175,31 @@
   
   <button class="collapsible" id="colordropdown">Options</button>
 
-  <br>
-  <br>
-
   <div class="content">
-    <br>
-    <p>Rows (0 to 15): <input type="number" id="settings_rows" onchange="changerows()" min="1" max="15"></p>
-    <br>
     <br>
     <p>Gray Overlay (0 to 1): <input type="number" step="0.01" id="settings_overlay" onchange="setoverlay()" min="0" max="1"></p>
     <br>
+    <p>Rows (0 to 15): <input type="number" id="settings_rows" onchange="changerows()" min="1" max="15"></p>
+    <br>
+    <p>Hexagon Size (10 to 200): <input type="number" step="1" id="settings_hexsize" onchange="sethexsize()" min="10" max="200"></p>
+    <br>
+    <p>Color Noise (0 to 30): <input type="number" step="1" id="settings_noise" onchange="setnoise()" min="0" max="30"></p>
+    <br>
+    <p>
+       Original:<input type="radio" id="origradio" name="radiobutton" value="original" checked>
+       Hexagons:<input type="radio" id="hexradio" name="radiobutton" value="hexagons">
+    </p>
   </div>
   <br>
   <button class="gen" onclick="gen()"> Generate</button>
   <button class="gen" onclick = "add()"> Add </button>
   <button class="gen" onclick="insert()"> Insert As Image</button>
+  <p id="idAccountOfEffectiveUsr" style="display: none"><?=Session.getEffectiveUser().getEmail()?></p>
   
   
   <br>
   <br>
-  <p>Preview- Right Click To Download</p>
+  <p>Preview</p>
   <canvas id="canvas" style="overflow: hidden;position: relative; border-style: none;"></canvas>
   
   
@@ -295,7 +300,9 @@
 
     var times = Math.round(Math.random()*4+4);
     var overlay = 0.0;
-
+    var size = 20;
+    var noise = 5;
+    
     function changerows(){
       settings = document.getElementById("settings_rows")
       if(settings.value== "")
@@ -329,99 +336,249 @@
       overlay = settings.value;
 //      console.log('overlay'+settings.value+typeof(settings.value));
     }
+    function sethexsize(){
+      settings = document.getElementById("settings_hexsize")
+      if(settings.value== "")
+      {
+        size = 20;
+        return;
+      }
+      size = settings.value;
+      if(size > 200){
+        settings.value = 200;
+      }
+      if(size<10){
+        settings.value = 10;
+      }
+      size = settings.value;
+    }
+    function setnoise(){
+      settings = document.getElementById("settings_noise")
+      if(settings.value== "")
+      {
+        noise = 5;
+        return;
+      }
+      noise = settings.value;
+      if(noise > 30){
+        settings.value = 30;
+      }
+      if(noise<0){
+        settings.value = 30;
+      }
+      noise = settings.value;
+    }
+    
+    function hexToRgb(hex) {
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? [parseInt(result[1], 16),parseInt(result[2], 16),parseInt(result[3], 16)] : null;
+    }
+    function colchange(col)
+    {
+      if(Math.random() > 0.5)
+        ret = col+Math.random()*noise;
+      else
+        ret = col-Math.random()*noise;
+      if(ret > 255)
+        ret = 255;
+      if(ret < 0)
+        ret = 0;
+      return ret;
+    }
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+    
+    function genorig(){
+      var c = document.getElementById("canvas");
+      var ctx = c.getContext("2d");
+      
+      c.width = 640*2;
+      c.height = 360*2;
+      ctx.save();  
+      ctx.shadowBlur = 20;
+      ctx.shadowColor = "rgba(0,0,0,0.85)";
+      //draw rect
+      ctx.rotate((10+Math.random()*40)*Math.PI/180);
+      
+      ctx.fillStyle = colors[colorpal][Math.floor(Math.random()*colors[colorpal].length)];
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    function gen(){
-    
-    var c = document.getElementById("canvas");
-    var ctx = c.getContext("2d");
-    
-    c.width = 640*2;
-    c.height = 360*2;
-    ctx.save();
-    //first color is accent color/ best color
-   
- //[["#FE9400","#283339","#19272F","#32434A"]];
-    
-    // ["#B3E5FC","#0288D1","#0097A7","#D4E157","#43A047","#81C784","#FFEE58","#FF8F00","#E65100"];
-    
-    ctx.shadowBlur = 20;
-    ctx.shadowColor = "rgba(0,0,0,0.85)";
-    // ctx.rotate((10+Math.random()*40)*Math.PI/180);
-    
-    //draw rect
-    //var width; //width of previous rectangle
-    ctx.rotate((10+Math.random()*40)*Math.PI/180);
-    
-    ctx.fillStyle = colors[colorpal][Math.floor(Math.random()*colors[colorpal].length)];
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    
-    
-    var preX = 0; // x val of previous rectangle
-    for(i = 0; i<times; i++){
-    var cw;
-    if(Math.random()>0.5){
-    cw = (c.width/times)+(Math.random()*(c.width/(times)));
-    }
-    else{
-    cw = (c.width/times)-(Math.random()*(c.width/(times*3)));
-    }
-    
-    var color = colors[colorpal][Math.floor(Math.random()*colors[colorpal].length)];
-    
-    ctx.fillStyle = color//random colors
-    ctx.fillRect(preX, -1000, 10000, 10000);
-    preX = preX+cw;
-    }
-    
-    
-    
-    
-    if(Math.random()>0.5){
-    ctx.fillStyle = colors[Math.round(Math.random()*colors.length)]; //random color
-    ctx.fillRect(c.width-Math.random()*(c.width)-100, -2000, 50000, 2000);
-    }
-    else{
-     ctx.fillStyle = colors[colorpal][0]; //random color
-     var yVal = Math.random() < 0.5 ? c.height : 0;
-      if(yVal>0){ //bottom circle
-        var xVal = Math.random() < 0.5 ? c.width/3 : c.width-c.width/6;
-        ctx.moveTo(xVal,yVal);
-        ctx.arc(xVal, yVal, Math.random()*100+500, 0, 2 * Math.PI);
-        ctx.fill(); 
+      var preX = 0; // x val of previous rectangle
+      for(i = 0; i<times; i++){
+        var cw;
+        if(Math.random()>0.5){
+          cw = (c.width/times)+(Math.random()*(c.width/(times)));
+        }
+        else{
+          cw = (c.width/times)-(Math.random()*(c.width/(times*3)));
+        }
+        var color = colors[colorpal][Math.floor(Math.random()*colors[colorpal].length)];
+        
+        ctx.fillStyle = color//random colors
+        ctx.fillRect(preX, -1000, 10000, 10000);
+        preX = preX+cw;
+      }
+      if(Math.random()>0.5){
+        ctx.fillStyle = colors[Math.round(Math.random()*colors.length)]; //random color
+        ctx.fillRect(c.width-Math.random()*(c.width)-100, -2000, 50000, 2000);
       }
       else{
+       ctx.fillStyle = colors[colorpal][0]; //random color
+       var yVal = Math.random() < 0.5 ? c.height : 0;
+       if(yVal>0){ //bottom circle
+          var xVal = Math.random() < 0.5 ? c.width/3 : c.width-c.width/6;
+          ctx.moveTo(xVal,yVal);
+          ctx.arc(xVal, yVal, Math.random()*100+500, 0, 2 * Math.PI);
+          ctx.fill(); 
+        }
+        else{
           var xVal = Math.random() < 0.5 ? c.width/4 : c.width-c.width/6;
           ctx.moveTo(xVal,yVal);
           ctx.arc(xVal, yVal, Math.random()*100+400, 0, 2 * Math.PI);
           ctx.fill(); 
-      }
-
-    }
-    //gray overlay
-    ctx.restore();
-    ctx.fillStyle = 'rgba(255,255,255,'+overlay+')';
-    ctx.fillRect(0,0,c.width,c.height);
-    
-    img = c.toDataURL("image/png");
-//document.write('<img src="'+img+'"/>');
-    
-    //google.script.run.insertGoogleMap(img);
-    
-   // google.script.run.addImageSlide('https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png');
-   img = img.substring(22);
+        }
   
+      }
+      //gray overlay
+      ctx.restore();
+      ctx.fillStyle = 'rgba(255,255,255,'+overlay+')';
+      ctx.fillRect(0,0,c.width,c.height);
+      
+      img = c.toDataURL("image/png");
+      img = img.substring(22);
+    }
+    
+    function genhex(){
+    
+      var x = 0;
+      var y = 0;
+      var c = document.getElementById("canvas");
+      var ctx = c.getContext("2d");
+      
+      c.width = 640*2;
+      c.height = 360*2;
+      ctx.fillStyle = "gainsboro";
+      
+      ctx.shadowBlur = 3;
+      ctx.shadowColor = "rgba(0,0,0,0.85)";
+      ctx.save()
+      ctx.restore();
+      ctx.fillStyle = '#bbbbbb';
+      x = 0;
+      y = 0;
+      var newcolarr = colors[colorpal].slice();
+      shuffle(newcolarr);
+//      console.log(colors[colorpal]+' '+newcolarr);
+      
+      for (var i = 0; i < c.width/size; i++) {
+  
+        for (var b = 0; b<c.height/size; b++) {
+            ctx.beginPath();
+            ctx.moveTo(x + size * Math.cos(0), y + size * Math.sin(0));
+  
+            for (var side = 0; side < 7; side++) {
+              ctx.lineTo(x + size * Math.cos(side * 2 * Math.PI / 6), y + size * Math.sin(side * 2 * Math.PI / 6));
+            }
+            
+            //color stuff
+            colidx = Math.floor((i+b)/(c.width/size/newcolarr.length)) % newcolarr.length
+            colcol = newcolarr[colidx];
+            nextcol = hexToRgb(newcolarr[(colidx+1)%newcolarr.length]);
+            diagcol = hexToRgb(colcol);
+            for(var xd = 0; xd < 3; xd++)
+            {
+              diagcol[xd] = diagcol[xd] + (nextcol[xd]-diagcol[xd])/(c.width/size/newcolarr.length)*((i+b)%(c.width/size/newcolarr.length));
+            }
+//            console.log(colcol+' '+diagcol);
+            ctx.fillStyle = 'rgb('+colchange(diagcol[0])+','+colchange(diagcol[1])+','+colchange(diagcol[2])+')';
+            ctx.fill();
+            y = y+size*1.732050808;
+          } 
+        x= x+size*1.5;
+        if(i%2 == 0)
+          y = -size*0.866025404;
+        else
+          y = 0;
+      }
+      //gray overlay
+      ctx.restore();
+      ctx.fillStyle = 'rgba(255,255,255,'+overlay+')';
+      ctx.fillRect(0,0,c.width,c.height);
+  
+      img = c.toDataURL("image/png");
+      img = img.substring(22);
+    }
+    
+    var issue;
+    var issuemsg = "Multiple Accounts Issue: This is a well-known bug Google is working to fix. See https://issuetracker.google.com/issues/69270374 for details.\nA workaround for this is to log out of all Google accounts and then log back in to the one Google account you want to use for Slides Background. You can also open an incognito window, log in, and use Slides Backgrounds from there. Thanks for your patience!";
 
-    google.script.run.addImageSlide(img);
-//    console.log(imgStore);
+    function issuechecker(gsresponse)
+    {
+      var usrWhoLoaded = document.getElementById('idAccountOfEffectiveUsr').innerHTML;
+//      console.log('issue: '+gsresponse+'-'+usrWhoLoaded);
+      if(gsresponse != usrWhoLoaded)
+      {
+        alert(issuemsg);
+        issue = true;
+        return;
+      }
+      else
+        issue = false;
+        google.script.run.addImageSlide(img);
+    }
+    
+    function gen()
+    {
+      if(document.getElementById('hexradio').checked == true)
+        genhex();
+      else
+        genorig();
+//      while(img == null || img.length < 10)
+//      {
+//        genimage();
+//        console.log("fin genimage()");
+//      }
+      if(issue == null)
+        google.script.run.withSuccessHandler(issuechecker).checkMultipleAccountIssue(); //runs issuechecker, which adds the image if no issue
+      else if(issue == true)
+      {
+        alert(issuemsg);
+        return;
+      }
+      else
+        google.script.run.addImageSlide(img);
     }
     
     function insert(){
-    google.script.run.addImage(img);
+      if(img == null)
+      {
+        alert("Please click Generate first.");
+        return;
+      }
+      if(issue == true)
+      {
+        alert(issuemsg);
+        return;
+      }
+      google.script.run.addImage(img);
     }
     
     function add(){
-    google.script.run.addImageSlide(img);
+      if(img == null)
+      {
+        alert("Please click Generate first.");
+        return;
+      }
+      if(issue == true)
+      {
+        alert(issuemsg);
+        return;
+      }
+      google.script.run.addImageSlide(img);
     }
     
     //data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==

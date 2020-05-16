@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,maximum-scale=0.9" />
     <link rel="stylesheet" type="text/css" href="assets/main.css">
     <link rel="icon" href="assets/profile.png" type="image/gif" sizes="16x16">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
 </head>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165989501-1"></script>
@@ -44,13 +45,6 @@
         </ul>
       
       <h2>Options</h2>
-      <h3 style="margin-left: 10px">Rows</h3>
-        <ul class="bullets">
-          <li>The number of rows refers to the number of rectangles displayed.</li>
-          <li>It accepts input values of integers from 0 to 15.</li>
-          <li>If no Row value is set, it randomly selects a value from 4 to 8 for each generated background.</li>
-          <li>0 rows creates two objects with some whitespace.</li>
-        </ul>
       <h3 style="margin-left: 10px">Gray Overlap</h3>
         <ul class="bullets">
             <li>This value refers to the transparency of a white layer that is used to tone down the generated backgrounds.</li>
@@ -58,6 +52,31 @@
             <li>For our brighter backgrounds, it is recommended to set the overlay to 0.3 so text on the slide is more visible.</li>
             <li>If no Gray Overlay value is set, it defaults to 0.</li>
           </ul>
+      <h3 style="margin-left: 10px">For Original Backgrounds</h3>
+      <h3 style="margin-left: 20px">Rows</h3>
+        <ul class="bullets2">
+          <li>The number of rows refers to the number of rectangles displayed.</li>
+          <li>It accepts input values of integers from 0 to 15.</li>
+          <li>If no Row value is set, it randomly selects a value from 4 to 8 for each generated background.</li>
+          <li>0 rows creates two objects with some whitespace.</li>
+        </ul>
+
+      <h3 style="margin-left: 10px">For Hexagons Backgrounds</h3>
+      <h3 style="margin-left: 20px">Hexagon Size</h3>
+        <ul class="bullets2">
+          <li>This value refers to the size of each hexagon in the tessellation.</li>
+          <li>It accepts integer values from 10 to 200.</li>
+          <li>If no value is set, it defaults to 20.</li>
+          <li>If no value is set, it defaults to 5.</li>
+        </ul>
+
+      <h3 style="margin-left: 20px">Color Noise</h3>
+        <ul class="bullets2">
+          <li>This value refers to how much each hexagon's color may vary from the colors in the selected color theme.</li>
+          <li>A higher Color Noise value would result in more random colors being shown as well as more variation between individual hexagons.</li>
+          <li>It accepts integer values from 0 to 30.</li>
+        </ul>
+
 
       <h2>Buttons</h2>
       <h3 style="margin-left: 10px">Generate</h3>
