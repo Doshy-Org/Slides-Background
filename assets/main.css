@@ -243,3 +243,16 @@ ul.bullets2 >li{
   padding: 0.6%;
   margin-left: 1%;
 }
+
+.carousel-cell {
+  width: 90%;
+  height: auto;
+  margin-right: 10px;
+  border-radius: 5px;
+  counter-increment: carousel-cell;
+}
+
+.carousel-img{
+  width: 100%;
+  height: auto;
+}

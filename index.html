@@ -7,6 +7,11 @@
     <link rel="icon" href="assets/profile.png" type="image/gif" sizes="16x16">
     <meta name="google-site-verification" content="ok6ySg_qj0ACj-mIQVG76q0EzsoDaqr99QZ11eJicjw" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+
 </head>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165989501-1"></script>
@@ -31,7 +36,6 @@
       <p style="color: white; font-size: 1.4em" class="subtitle">Generate Beautiful Material Backgrounds For Your Presentation</p>
     </div>
 
-
     <div class="row">
 
       <div class="column" style="background-color:#F8F8F8; padding: 2%; width: 60%;">
@@ -41,7 +45,7 @@
       </div>
 
       <div class="column" style="background-color:white; padding-left: 4%; width: 40%;">
-        <p style="text-align: left; font-size: 1.6em;">10+ Unique Themes To Choose From</p>
+        <p style="font-size: 1.6em;">10+ Unique Themes To Choose From</p>
         <br>
         <br>
       <div class="selectBlock" onclick="settheme(0)" id="1000">
@@ -97,7 +101,19 @@
       </div>
     </div>
     <div>
+
+    <div class="main-carousel"  data-flickity='{ "wrapAround": true, "autoPlay": 2500}'>
+      <div class="carousel-cell">
+        <img src="assets/Background.png" class="carousel-img">
+      </div>
+      <div class="carousel-cell"><img src="examples/1.png" class="carousel-img"></div>
+      <div class="carousel-cell"><img src="examples/2.png" class="carousel-img"></div>
+      <div class="carousel-cell"><img src="examples/3.png" class="carousel-img"></div>
+      <div class="carousel-cell"><img src="examples/4.png" class="carousel-img"></div>
+      <div class="carousel-cell"><img src="examples/5.png" class="carousel-img"></div>
       
+    </div>
+
     </div>
      <div class="full" style="display: inline-block;">
       <img src="assets/gsuite.png" style="width: 3em; float: center; vertical-align: middle; margin-right: 20px">
@@ -118,6 +134,7 @@
 
 </body>
 <script type="text/javascript">
+
   var colors = [
     ["#1976D2","#607D8B","#BBDEFB","#2196F3","#536DFE","#BDBDBD"],
     ["#FE9400","#283339","#19272F","#32434A"],
