@@ -3,16 +3,22 @@
   
 <head> 
     <title> 
-        Waves 
+        Smooth Curve 
     </title> 
       
 </head> 
   
 <body> 
     <center> 
-      
-        <canvas id="GFG" width="600" height="400" style="border:2px solid black"> 
-        </canvas> 
+        <canvas id="GFG" width="1280" height="720" style="border:2px solid black"> 
+        </canvas>
+        <br>
+        Variation <input type="number" id =  "variation"> 
+        <br><br>
+        Base dy <input type="number" id = "dy">
+        <br><br>
+        <button onclick="gen()">gen </button>
+
     </center> 
       
     <script> 
@@ -24,27 +30,28 @@
         } 
       
         function bzCurve(points, f, t) { 
-            if (typeof(f) == 'undefined') f = 0.3; 
-            if (typeof(t) == 'undefined') t = 0.6; 
-          
+            if (typeof(f) == 'undefined') f = 0.3; // sharpness of curve
+            if (typeof(t) == 'undefined') t = 0.6; //built in variation // waviness
+            
+            console.log("wave");
             ctx.beginPath(); 
           
             var m = 0; 
             var dx1 = 0; 
             var dy1 = 0; 
-            
+            var y = 10; //distance y between each curve
             for (var a = 0; a< 7; a++) {
 
                 let region = new Path2D();
                 region.moveTo(0,0);
-                region.lineTo(points[0].x, points[0].y); 
+                region.lineTo(points[0].x, points[0].y - y*a); //line to the bottom left where curve starts
                 var preP = points[0]; 
-                preP.y = preP.y - 15*a;
+                preP.y = preP.y - y*a; 
 
 
                 for (var i = 1; i < points.length; i++) { 
                     var curP = points[i]; 
-                    curP.y = curP.y - 15*a;
+                    curP.y = curP.y - y*a; //move up y*a 
                     nexP = points[i + 1]; 
 
                     if (nexP) { 
@@ -66,7 +73,7 @@
                     dy1 = dy2; 
                     preP = curP; 
                 } 
-                region.lineTo(600,0);
+                region.lineTo(600,0); //fill entire canvas vetically
                 region.lineTo(0,0);
                 ctx.fillStyle = 'rgba(100,100,200, 0.3)';
                 ctx.fill(region);
@@ -74,26 +81,35 @@
             ctx.stroke(); 
         } 
   
-        // Generate random data  
-        var lines = [];   
-        var prey = 400;
-        var X = -10; 
-        var t = 200; // control the width of X. 
-        for (var i = 0; i < 10; i++ ) { 
-            Y = prey - Math.floor((Math.random() * 100)); 
-            prey = Y;
-            p = { x: X, y: Y }; 
-            lines.push(p); 
-            X = X + t; 
-        } 
-  
-        // Draw smooth line  
-        ctx.setLineDash([0]); 
-        ctx.lineWidth = 2; 
+        // Generate random data
+        var variation;
+        var dy;
+
+        function gen(){
+            ctx.clearRect(0, 0, 600, 400);
+            variation = document.getElementById("variation").value;
+            dy = document.getElementById("dy").value;
+            var lines = [];   
+            var prey = 400;
+            var X = -10; 
+            var t = 200; // control the width of X. 
+            for (var i = 0; i < 10; i++ ) { 
+                Y = prey - Math.floor((Math.random() * variation) + dy); 
+                prey = Y;
+                p = { x: X, y: Y }; 
+                lines.push(p); 
+                X = X + t; 
+            } 
+      
+            // Draw smooth line  
+            ctx.setLineDash([0]); 
+            ctx.lineWidth = 2; 
 
 
-        ctx.strokeStyle = "blue"; 
-        bzCurve(lines, 0.3, 1); 
+            ctx.strokeStyle = "blue"; 
+            bzCurve(lines, 0.3, 1); 
+        }
+        
     </script>  
 </body> 
   

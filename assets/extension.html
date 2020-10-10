@@ -77,7 +77,9 @@
 .active,.collapsible:hover {
   background-color: #555;
 }
-
+.collapsible:hover{
+  background-color: grey;
+}
 .collapsible:after {
   content: '\002B';
   color: white;
@@ -99,8 +101,8 @@
 }
 
 </style>
-
-<div class="sidebar">
+<body onload="gen()">
+<div class="sidebar" >
   <button class="collapsible" id="colordropdown">Select Theme</button>
     <div class="content">
      <div class="selectBlock" onclick="settheme(0)" id="1000">
@@ -189,6 +191,7 @@
        Original:<input type="radio" id="origradio" name="radiobutton" value="original" checked>
        Hexagons:<input type="radio" id="hexradio" name="radiobutton" value="hexagons">
     </p>
+    <br>
   </div>
   <br>
   <button class="gen" onclick="gen()"> Generate</button>
@@ -198,10 +201,13 @@
   
   
   <br>
+  
   <br>
   <p>Preview</p>
+  <br>
   <canvas id="canvas" style="overflow: hidden;position: relative; border-style: none;"></canvas>
-  
+  </div>
+</body>
   
   <script type="text/javascript">
   
@@ -554,21 +560,23 @@
     }
     
     function insert(){
-      if(img == null)
-      {
-        alert("Please click Generate first.");
-        return;
-      }
-      if(issue == true)
-      {
-        alert(issuemsg);
-        return;
-      }
-      google.script.run.addImage(img);
+       alert("Try this feature using Google Slides!");
+      // if(img == null)
+      // {
+      //   alert("Please click Generate first.");
+      //   return;
+      // }
+      // if(issue == true)
+      // {
+      //   alert(issuemsg);
+      //   return;
+      // }
+      // google.script.run.addImage(img);
     }
     
     function add(){
-      if(img == null)
+       alert("Try this feature using Google Slides!");
+     /* if(img == null)
       {
         alert("Please click Generate first.");
         return;
@@ -578,7 +586,7 @@
         alert(issuemsg);
         return;
       }
-      google.script.run.addImageSlide(img);
+      google.script.run.addImageSlide(img);*/
     }
     
     //data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==

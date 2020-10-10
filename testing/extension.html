@@ -21,6 +21,7 @@
     margin-bottom:3px;
     border-radius: 3px;
     font-size: 10px;
+
   }
   p{
     padding-left: 10px;
@@ -35,7 +36,7 @@
   }
   .selectBlock:hover{
     cursor: pointer;
-    background-color: #adcdff !important; 
+    background-color: #adcdff !important;
   }
   .selected{
     background-color: #82b1fa;
@@ -178,16 +179,35 @@
         <br>
         <p>Gray Overlay (0 to 1): <input type="number" step="0.01" id="settings_overlay" onchange="setoverlay()" min="0" max="1"></p>
         <br>
-        <p>Rows (0 to 15): <input type="number" id="settings_rows" onchange="changerows()" min="1" max="15"></p>
-        <br>
-        <p>Hexagon Size (10 to 200): <input type="number" step="1" id="settings_hexsize" onchange="sethexsize()" min="10" max="200"></p>
-        <br>
-        <p>Color Noise (0 to 30): <input type="number" step="1" id="settings_noise" onchange="setnoise()" min="0" max="30"></p>
-        <br>
+
         <p>
-            Original:<input type="radio" id="origradio" name="radiobutton" value="original" checked> Hexagons:
-            <input type="radio" id="hexradio" name="radiobutton" value="hexagons">
+          Original:<input type="radio" id="origradio" name="radiobutton" value="original" checked>
+          <br><br>
+          <div id="origsettings">
+            Rows (0 to 15): <input type="number" id="settings_rows" onchange="changerows()" min="1" max="15">
+          </div>
+
         </p>
+        <br>
+
+        <p>
+          Hexagons:<input type="radio" id="hexradio" name="radiobutton" value="hexagons"> <br><br>
+          <div id = "hexagonsettings">
+            Hexagon Size (10 to 200): <input type="number" step="1" id="settings_hexsize" onchange="sethexsize()" min="10" max="200"><br><br>
+            Color Noise (0 to 30): <input type="number" step="1" id="settings_noise" onchange="setnoise()" min="0" max="30">
+          </div>
+        </p>
+        <br>
+        <p>Waves (Beta):<input type="radio" id="waveradio" name="radiobutton" value="waves">
+          <br><br>
+          Waviness(-100 to 100): <input type="number" step="1" id="settings_wave" onchange="setwave()" min="-1000" max="1000">
+          <br><br>
+          Slope: <input type="number" step="1" id="settings_slope" onchange="setslope()" min="-1000" max="1000">
+          <br><br>
+          Distance (-1000 to 1000): <input type="number" step="1" id="settings_distance" onchange="setdistance()" min="-1000" max="1000">
+          <br><br>
+        </p>
+
         <br>
     </div>
     <br>
@@ -212,7 +232,7 @@
 
         var coll = document.getElementsByClassName("collapsible");
         var i;
-    
+
         for (i = 0; i < coll.length; i++) {
           coll[i].addEventListener("click", function() {
             this.classList.toggle("active");
@@ -221,10 +241,10 @@
               content.style.maxHeight = null;
             } else {
               content.style.maxHeight = content.scrollHeight + "px";
-            } 
+            }
           });
         }
-        
+
         var colors = [
         ["#1976D2","#607D8B","#BBDEFB","#2196F3","#536DFE","#BDBDBD"],
         ["#FE9400","#283339","#19272F","#32434A"],
@@ -243,7 +263,7 @@
         ["#F2D8BC","#FDF6D8","#D1BEA2","#B8A797","#BEB5AB","#8D877B","#9A9087","#BBB7AB","#C1C5C5","#989994"],
         ["#97CFFF","#658DC6","#76A8D8","#D8EC7E","#95B453","#C5D762","#D9E4EE","#E0E3E6","#8BBFFE"]
         ];
-        
+
         var colornames = [
         "Sea Blue",
         "Dark",
@@ -262,15 +282,15 @@
         "Misty Morning",
         "Summer Day"
         ];
-    
+
         var lightdark = [1,0,0,0,0,0,1,1,1,1,1,1,0,1,0,0]; //bimary array to get if text should be light or dark on theme 0 is dark, 1 light
-        
+
          colorpal = Math.floor(Math.random()*colors.length); //selected colors
          var img;
          var imgfull;
-         
-         
-         function settheme(num){
+
+
+        function settheme(num){
           document.getElementById(1000+colorpal).classList.remove("selected");
           document.getElementById(1000+colorpal).classList.add("selectBlock");
           console.log("themeset");
@@ -280,35 +300,41 @@
           drop.innerText = "Select Theme | " + colornames[num];
           drop.click();
           drop.style.backgroundColor = colors[num][0];
-          drop.style.color = (lightdark[num] == 1) ? 'white' : 'black'; 
-    
+          drop.style.color = (lightdark[num] == 1) ? 'white' : 'black';
+
           colorpal = num;
           window.scrollTo(0,0);
         }
-    
-        
+
+
         function displayThemes() {
           for(var i = 0; i<colors.length; i++){
-    
+
           var ul = document.getElementById(i);
-    
+
             for(var a = 0; a<colors[i].length; a++){
               var li = document.createElement("li");
               li.appendChild(document.createTextNode("P"));
               li.style.backgroundColor = colors[i][a];
               li.style.color= colors[i][a];
               ul.appendChild(li);
-    
+
             }
           }
         }
         displayThemes();
-    
+
         var times = Math.round(Math.random()*4+4);
         var overlay = 0.0;
         var size = 20;
         var noise = 5;
-        
+
+        //for wave
+        var slope = 10;
+        var distance = 15;
+        var waviness = 0.6;
+        var smoothness = 0.3;
+
         function changerows(){
           settings = document.getElementById("settings_rows")
           if(settings.value== "")
@@ -374,13 +400,64 @@
           }
           noise = settings.value;
         }
-        
+    //for waves
+        function setwave(){
+          settings = document.getElementById("settings_wave")
+          if(settings.value== "")
+          {
+            waviness = 0.6;
+            return;
+          }
+          waviness = settings.value;
+          if(waviness > 100){
+            settings.value = 100;
+          }
+          if(waviness<-100){
+            settings.value = -100;
+          }
+          waviness = settings.value;
+        }
+
+        function setdistance(){
+          settings = document.getElementById("settings_distance")
+          if(settings.value== "")
+          {
+            distance = 15;
+            return;
+          }
+          distance = settings.value;
+          if(distance > 1000){
+            settings.value = 1000;
+          }
+          if(distance<-1000){
+            settings.value = -1000;
+          }
+          distance = settings.value;
+        }
+
+        function setslope(){
+          settings = document.getElementById("settings_slope")
+          if(settings.value== "")
+          {
+            slope = 10;
+            return;
+          }
+          slope = settings.value;
+          if(slope > 1000){
+            settings.value = 1000;
+          }
+          if(slope<0){
+            settings.value = 0;
+          }
+          slope = settings.value;
+        }
+
         function hexToRgb(hex) {
           var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
           return result ? [parseInt(result[1], 16),parseInt(result[2], 16),parseInt(result[3], 16)] : null;
         }
-        function colchange(col)
-        {
+
+        function colchange(col){
           if(Math.random() > 0.5)
             ret = col+Math.random()*noise;
           else
@@ -397,22 +474,22 @@
               [array[i], array[j]] = [array[j], array[i]];
           }
         }
-        
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        var c = document.getElementById("canvas");
+        var ctx = c.getContext("2d");
+        c.width = 640*2;
+        c.height = 360*2;
+
         function genorig(){
-          var c = document.getElementById("canvas");
-          var ctx = c.getContext("2d");
-          
-          c.width = 640*2;
-          c.height = 360*2;
-          ctx.save();  
+          ctx.save();
           ctx.shadowBlur = 20;
           ctx.shadowColor = "rgba(0,0,0,0.85)";
           //draw rect
           ctx.rotate((10+Math.random()*40)*Math.PI/180);
-          
+
           ctx.fillStyle = colors[colorpal][Math.floor(Math.random()*colors[colorpal].length)];
           ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
+
           var preX = 0; // x val of previous rectangle
           for(i = 0; i<times; i++){
             var cw;
@@ -423,7 +500,7 @@
               cw = (c.width/times)-(Math.random()*(c.width/(times*3)));
             }
             var color = colors[colorpal][Math.floor(Math.random()*colors[colorpal].length)];
-            
+
             ctx.fillStyle = color//random colors
             ctx.fillRect(preX, -1000, 10000, 10000);
             preX = preX+cw;
@@ -439,40 +516,33 @@
               var xVal = Math.random() < 0.5 ? c.width/3 : c.width-c.width/6;
               ctx.moveTo(xVal,yVal);
               ctx.arc(xVal, yVal, Math.random()*100+500, 0, 2 * Math.PI);
-              ctx.fill(); 
+              ctx.fill();
             }
             else{
               var xVal = Math.random() < 0.5 ? c.width/4 : c.width-c.width/6;
               ctx.moveTo(xVal,yVal);
               ctx.arc(xVal, yVal, Math.random()*100+400, 0, 2 * Math.PI);
-              ctx.fill(); 
+              ctx.fill();
             }
-      
+
           }
           //gray overlay
           ctx.restore();
           ctx.fillStyle = 'rgba(255,255,255,'+overlay+')';
           ctx.fillRect(0,0,c.width,c.height);
-          
+
           imgfull = c.toDataURL("image/png");
           document.getElementById("preview").src = imgfull;
           document.getElementById("preview").style.width = "100%";
           img = imgfull.substring(22) ;
-    
-    
+
         }
-        
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function genhex(){
-        
           var x = 0;
           var y = 0;
-          var c = document.getElementById("canvas");
-          var ctx = c.getContext("2d");
-          
-          c.width = 640*2;
-          c.height = 360*2;
           ctx.fillStyle = "gainsboro";
-          
+
           ctx.shadowBlur = 3;
           ctx.shadowColor = "rgba(0,0,0,0.85)";
           ctx.save()
@@ -482,18 +552,16 @@
           y = 0;
           var newcolarr = colors[colorpal].slice();
           shuffle(newcolarr);
-    //      console.log(colors[colorpal]+' '+newcolarr);
-          
+
           for (var i = 0; i < c.width/size; i++) {
-      
+
             for (var b = 0; b<c.height/size; b++) {
                 ctx.beginPath();
                 ctx.moveTo(x + size * Math.cos(0), y + size * Math.sin(0));
-      
+
                 for (var side = 0; side < 7; side++) {
                   ctx.lineTo(x + size * Math.cos(side * 2 * Math.PI / 6), y + size * Math.sin(side * 2 * Math.PI / 6));
                 }
-                
                 //color stuff
                 colidx = Math.floor((i+b)/(c.width/size/newcolarr.length)) % newcolarr.length
                 colcol = newcolarr[colidx];
@@ -503,11 +571,10 @@
                 {
                   diagcol[xd] = diagcol[xd] + (nextcol[xd]-diagcol[xd])/(c.width/size/newcolarr.length)*((i+b)%(c.width/size/newcolarr.length));
                 }
-    //            console.log(colcol+' '+diagcol);
                 ctx.fillStyle = 'rgb('+colchange(diagcol[0])+','+colchange(diagcol[1])+','+colchange(diagcol[2])+')';
                 ctx.fill();
                 y = y+size*1.732050808;
-              } 
+              }
             x= x+size*1.5;
             if(i%2 == 0)
               y = -size*0.866025404;
@@ -518,16 +585,109 @@
           ctx.restore();
           ctx.fillStyle = 'rgba(255,255,255,'+overlay+')';
           ctx.fillRect(0,0,c.width,c.height);
-      
+
           imgfull = c.toDataURL("image/png");
           document.getElementById("preview").src = imgfull;
           document.getElementById("preview").style.width = "100%";
           img = imgfull.substring(22);
         }
-        
+
+        function gradient(a, b) {
+            return (b.y-a.y)/(b.x-a.x);
+        }
+
+        function bzCurve(points, f, t) {
+          console.log("wave");
+            if (typeof(f) == 'undefined') f = 0.3; // sharpness of curve
+            if (typeof(t) == 'undefined') t = 0.6; //built in variation // waviness
+
+            ctx.beginPath();
+
+            var m = 0;
+            var dx1 = 0;
+            var dy1 = 0;
+            var y = distance; //distance y between each curve
+            for (var a = 0; a< 7; a++) {
+
+                let region = new Path2D();
+                region.moveTo(0,0);
+                region.lineTo(points[0].x, points[0].y - y*a); //line to the bottom left where curve starts
+                var preP = points[0];
+                preP.y = preP.y - y*a;
+
+                for (var i = 1; i < points.length; i++) {
+                    var curP = points[i];
+                    curP.y = curP.y - y*a; //move up y*a
+                    nexP = points[i + 1];
+
+                    if (nexP) {
+                        m = gradient(preP, nexP);
+                        dx2 = (nexP.x - curP.x) * -f;
+                        dy2 = dx2 * m * t;
+                    } else {
+                        dx2 = 0;
+                        dy2 = 0;
+                    }
+
+                    region.bezierCurveTo(
+                        preP.x - dx1, preP.y - dy1,
+                        curP.x + dx2, curP.y + dy2,
+                        curP.x, curP.y
+                    );
+
+                    dx1 = dx2;
+                    dy1 = dy2;
+                    preP = curP;
+                }
+                region.lineTo(1280,0); //fill entire canvas vetically
+                region.lineTo(0,0);
+                rgbcolor = hexToRgb(colorpal[1]);
+                ctx.fillStyle = 'rgba('+hexToRgb(colors[colorpal][0])+', 0.3)';
+                ctx.fill(region);
+            }
+            ctx.stroke();
+        }
+
+        // Generate random data
+        var variation;
+        var dy;
+
+        function genwaves(){
+
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+            //ctx.clearRect(0, 0, 600, 400);
+            variation = 100;//document.getElementById("variation").value;
+            dy = slope;//document.getElementById("dy").value;
+            var lines = [];
+            var prey = 720;
+            var X = -10;
+            var t = 400; // control the width of X.
+            for (var i = 0; i < 10; i++ ) {
+                Y = prey - Math.floor((Math.random() * variation) + dy);
+                prey = Y;
+                p = { x: X, y: Y };
+                lines.push(p);
+                X = X + t;
+            }
+
+            // Draw smooth line
+            ctx.setLineDash([0]);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "blue";
+            bzCurve(lines, smoothness, waviness);
+
+          ctx.fillStyle = 'rgba(255,255,255,'+overlay+')';
+          ctx.fillRect(0,0,c.width,c.height);
+
+          imgfull = c.toDataURL("image/png");
+          document.getElementById("preview").src = imgfull;
+          document.getElementById("preview").style.width = "100%";
+          img = imgfull.substring(22) ;
+        }
+
         var issue;
         var issuemsg = "Multiple Accounts Issue: This is a well-known bug Google is working to fix. See https://issuetracker.google.com/issues/69270374 for details.\nA workaround for this is to log out of all Google accounts and then log back in to the one Google account you want to use for Slides Background. You can also open an incognito window, log in, and use Slides Backgrounds from there. Thanks for your patience!";
-    
+
         function issuechecker(gsresponse)
         {
           var usrWhoLoaded = document.getElementById('idAccountOfEffectiveUsr').innerHTML;
@@ -542,11 +702,13 @@
             issue = false;
             google.script.run.addImageSlide(img);
         }
-        
+
         function gen()
         {
           if(document.getElementById('hexradio').checked == true)
             genhex();
+          else if(document.getElementById('waveradio').checked == true)
+            genwaves();
           else
             genorig();
     //      while(img == null || img.length < 10)
@@ -564,7 +726,7 @@
           else
             google.script.run.addImageSlide(img);
         }
-        
+
         function insert(){
           if(img == null)
           {
@@ -578,7 +740,7 @@
           }
           google.script.run.addImage(img);
         }
-        
+
         function add(){
           if(img == null)
           {
@@ -596,7 +758,7 @@
         function addsave(id){
           console.log(id);
           var tempimg = document.getElementById(id).src;
-          
+
           tempimg = tempimg.substring(22);
           google.script.run.addImageSlide(tempimg);
 
@@ -615,10 +777,10 @@
             alert(issuemsg);
             return;
           }
-          var saved = document.createElement("img"); 
+          var saved = document.createElement("img");
           saved.src = imgfull;
           saved.style.width = "100%";
-          saved.id = savedid;   
+          saved.id = savedid;
           document.body.appendChild(saved);
 
           var buttonadd = document.createElement("input");
@@ -634,7 +796,8 @@
           document.body.appendChild(brr);
           savedid++;
         }
-        
+
         //data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==
+        //almost 1k xd
     </script>
 </div>
