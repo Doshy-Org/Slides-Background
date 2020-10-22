@@ -63,7 +63,7 @@ body, html {
     overflow: hidden;
   }
   .top2{
-    padding: 20% 17% 20% 17%;
+    padding: 34vh;
     background-image: url('hexbg.png');
     background-size: cover;
     overflow: hidden;
