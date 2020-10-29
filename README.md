@@ -3,7 +3,7 @@ Simple Google Slides add-on to generate beautiful material backgrounds for your 
 
 Install the extension here: https://gsuite.google.com/marketplace/app/appname/732310380877
 
-Our Website: https://slides.lall.pw/
+Our Website: https://slides.doshy.org/
 
 ## Current Features:
 * 16 different color themes
