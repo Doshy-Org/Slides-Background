@@ -505,12 +505,17 @@
   }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   var c = document.getElementById("canvas");
-  var ctx = c.getContext("2d");
-  c.width = 640*2;
-  c.height = 360*2;
+    var ctx = c.getContext("2d");
+    c.width = 640*2;
+    c.height = 360*2;
 
   function genorig(){
+    var c = document.getElementById("canvas");
+    var ctx = c.getContext("2d");
+    c.width = 640*2;
+    c.height = 360*2;
     ctx.save();
+
     ctx.shadowBlur = 20;
     ctx.shadowColor = "rgba(0,0,0,0.85)";
     //draw rect
@@ -568,6 +573,11 @@
   }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   function genhex(){
+    var c = document.getElementById("canvas");
+    var ctx = c.getContext("2d");
+    c.width = 640*2;
+    c.height = 360*2;
+
     var x = 0;
     var y = 0;
     ctx.fillStyle = "gainsboro";
