@@ -1,0 +1,65 @@
+<!DOCTYPE html> 
+<html> 
+  
+<head> 
+    <title> 
+        Smooth Curve 
+    </title> 
+      
+</head> 
+  
+<body> 
+    <center> 
+        <canvas id="GFG" width="600" height="400" style="border:2px solid black"> 
+        </canvas>
+        <button onclick="gen()">gen </button>
+
+    </center> 
+      
+    <script> 
+        var cv = document.getElementById("GFG"); 
+        var ctx = cv.getContext("2d"); 
+
+        function gen(){
+            ctx.clearRect(0, 0, 600, 400);
+            
+            
+            for ( var i = 0; i<6; i++){
+                if(i%2 == 0){
+                    ctx.beginPath(); 
+                    ctx.moveTo(500+(badng(100)),400);
+                    ctx.lineTo(600+(badng(200)),0);
+                    ctx.lineTo(600,0);  
+                    ctx.lineTo(600,400);
+                    ctx.closePath();
+                    ctx.fillStyle = "rgba(110,218,16,0.2)";
+                    ctx.fill();
+                }
+                else{
+                    ctx.beginPath(); 
+                    ctx.moveTo(500+(badng(100)),0);
+                    ctx.lineTo(600+(badng(200)),400);
+                    ctx.lineTo(600,400);  
+                    ctx.lineTo(600,0);
+                    ctx.closePath();
+                    ctx.fillStyle = "rgba(110,218,16,0.2)";
+                    ctx.fill();
+                }
+                
+            }
+      
+
+        
+        }
+
+        function badng(num){
+            if(Math.random() < 0.5){
+                return -1*(Math.random()*num);
+            }
+            return Math.random()*num;
+        }
+        
+    </script>  
+</body> 
+  
+</html> 

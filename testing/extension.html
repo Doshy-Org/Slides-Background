@@ -100,7 +100,16 @@
   }
   .optionblock{
     padding: 10px;
+    padding-bottom: 25px;
     border-radius: 10px;
+    cursor: pointer;
+  }
+  
+  .themeName{
+    font-size: 20px;
+    display: inline-block;
+    text-indent: 0px;
+    padding-left: 0px;
   }
 </style>
 
@@ -182,9 +191,9 @@
     <div class="content">
         <br>
         <div class="optionblock">Gray Overlay (0 to 1): <input type="number" step="0.01" id="settings_overlay" onchange="setoverlay()" min="0" max="1"></div>
-        <br>
-        <div class="optionblock" style="background-color: white" id = "origbox">
-          Original:<input type="radio" id="origradio" name="radiobutton" value="original" checked="checked" onclick="setStyle();">
+        
+        <div class="optionblock" style="background-color: #bddcfc" id = "origbox" onclick="checkorig();">
+          <p class="themeName">Original:</p><input type="radio" id="origradio" name="radiobutton" value="original" checked="checked" onclick="setStyle();">
           <br><br>
           <div id="origsettings">
             Rows (0 to 15): <input type="number" id="settings_rows" onchange="changerows()" min="1" max="15">
@@ -192,30 +201,33 @@
 
         </div>
 
-        <br>
+        
 
-        <div class="optionblock" id = "hexbox"> 
-          Hexagons:<input type="radio" id="hexradio" name="radiobutton" value="hexagons" onchange="setStyle()"> <br><br>
+        <div class="optionblock" id = "hexbox" onclick="checkhex();"> 
+          <p class="themeName">Hexagons:</p><input type="radio" id="hexradio" name="radiobutton" value="hexagons" onchange="setStyle()"> <br><br>
           <div id = "hexagonsettings">
             Hexagon Size (10 to 200): <input type="number" step="1" id="settings_hexsize" onchange="sethexsize()" min="10" max="200"><br><br>
             Color Noise (0 to 30): <input type="number" step="1" id="settings_noise" onchange="setnoise()" min="0" max="30">
           </div>
         </div>
 
-        <br>
+        
 
-        <div class="optionblock" id = "wavebox">
-          Waves (Beta):<input type="radio" id="waveradio" name="radiobutton" value="waves" onchange="setStyle()">
+        <div class="optionblock" id = "wavebox" onclick="checkwave();">
+          <p class="themeName">Waves: </p><input type="radio" id="waveradio" name="radiobutton" value="waves" onchange="setStyle()">
           <br><br>
           Waviness(-100 to 100): <input type="number" step="1" id="settings_wave" onchange="setwave()" min="-1000" max="1000">
           <br><br>
           Slope: <input type="number" step="1" id="settings_slope" onchange="setslope()" min="-1000" max="1000">
           <br><br>
-          Distance (-1000 to 1000): <input type="number" step="1" id="settings_distance" onchange="setdistance()" min="-1000" max="1000">
+          Distance (-100 to 100): <input type="number" step="1" id="settings_distance" onchange="setdistance()" min="-1000" max="1000">
+          <br><br>
+          <!--Strata (Theme Colors):<input type="radio" id="themeradio" name="radiobutton1" value="themecol" checked="checked" onchange="setColType()"> -->
+          Use custom colors?<input type="checkbox" id="customradio" name="radiobutton1" value="customcol" onchange="setColType()"> <br>
+          Base Color: <input id="settings_wfg" type="color" onchange="setwfg()"> <br> Accent Color: <input id="settings_wbg" type="color" onchange="setwbg()">
           <br><br>
         </div>
-
-        <br>
+        
     </div>
     <br>
     <button class="gen" onclick="gen()"> Generate</button>
@@ -242,21 +254,34 @@
   var i;
 
   var style = 1; 
+  function checkorig(){
+    document.getElementById('origradio').checked = true;
+    setStyle();
+  }
+  function checkhex() {
+    document.getElementById('hexradio').checked = true;
+    setStyle();
+  }
+  function checkwave(){
+    document.getElementById('waveradio').checked = true;
+    setStyle();
+  }
+
   function setStyle() {
     document.getElementById('origbox').style.backgroundColor = "#f1f1f1";
     document.getElementById('hexbox').style.backgroundColor = "#f1f1f1";
     document.getElementById('wavebox').style.backgroundColor = "#f1f1f1";
 
     if(document.getElementById('hexradio').checked == true){
-      document.getElementById('hexbox').style.backgroundColor = "white";
+      document.getElementById('hexbox').style.backgroundColor = "#bddcfc";
       style = 1;
     }
     else if(document.getElementById('waveradio').checked == true){
-      document.getElementById('wavebox').style.backgroundColor = "white";
+      document.getElementById('wavebox').style.backgroundColor = "#bddcfc";
       style = 3;
     }
     else{
-      document.getElementById('origbox').style.backgroundColor = "white";
+      document.getElementById('origbox').style.backgroundColor = "#bddcfc";
       style = 2;
     }
   }
@@ -360,9 +385,12 @@
 
   //for wave
   var slope = 10;
-  var distance = 15;
-  var waviness = 0.6;
+  var distance = -10;
+  var waviness = 3;
   var smoothness = 0.3;
+  var cuscol = false;
+  var wfg = "";
+  var wbg = "";
 
   function changerows(){
     settings = document.getElementById("settings_rows")
@@ -434,7 +462,7 @@
     settings = document.getElementById("settings_wave")
     if(settings.value== "")
     {
-      waviness = 0.6;
+      waviness = 3; //mebbe default to 8
       return;
     }
     waviness = settings.value;
@@ -451,7 +479,7 @@
     settings = document.getElementById("settings_distance")
     if(settings.value== "")
     {
-      distance = 15;
+      distance = -10;
       return;
     }
     distance = settings.value;
@@ -480,7 +508,24 @@
     }
     slope = settings.value;
   }
+  function setColType()
+  {
+    if(document.getElementById('customradio').checked)
+      cuscol = true;
+    else
+      cuscol = false;
+  }
+  function setwfg()
+  {
+    wfg = document.getElementById("settings_wfg").value;
+  }
+  function setwbg()
+  {
+    wbg = document.getElementById("settings_wbg").value;
+  }
 
+
+////////////////////////////////////////////////////////////////
   function hexToRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? [parseInt(result[1], 16),parseInt(result[2], 16),parseInt(result[3], 16)] : null;
@@ -681,11 +726,17 @@
           region.lineTo(1280,0); //fill entire canvas vetically
           region.lineTo(0,0);
           rgbcolor = hexToRgb(colorpal[1]);
-          ctx.fillStyle = 'rgba('+hexToRgb(colors[colorpal][0])+', 0.3)';
+          fg_col = colors[colorpal][Math.floor(Math.random()*colors[colorpal].length)];
+            
+          if(cuscol == true)
+            fg_col = wfg
+          ctx.fillStyle = 'rgba('+hexToRgb(fg_col)+',0.3)';
           ctx.fill(region);
       }
       ctx.stroke();
   }
+  
+  ////////////////////////////////////////////////////////////////////////////////////////////////
 
   // Generate random data
   var variation;
@@ -694,6 +745,13 @@
   function genwaves(){
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+    var bg_col = colors[colorpal][Math.floor(Math.random()*colors[colorpal].length)];
+    if(cuscol == true)
+      bg_col = wbg;
+    console.log(bg_col);
+    ctx.fillStyle = bg_col;
+    ctx.fillRect(0,0,c.width,c.height);
       //ctx.clearRect(0, 0, 600, 400);
       variation = 100;//document.getElementById("variation").value;
       dy = slope;//document.getElementById("dy").value;
