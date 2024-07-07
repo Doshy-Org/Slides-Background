@@ -1,1072 +1,1428 @@
-<style type="text/css">
-  body,
-  html {
-    height: 100%;
-    margin: 0;
-    background: white;
-    font-family: helvetica;
-  }
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 10px;
-    overflow: hidden;
-  }
-  li {
-    float: left;
-    display: block;
-    text-align: center;
-    padding: 6px;
-    padding-left: 10px;
-    margin-right: 7px;
-    margin-bottom: 3px;
-    border-radius: 3px;
-    font-size: 10px;
-  }
-  p {
-    padding-left: 10px;
-    margin: 0px;
-  }
-  .selectBlock {
-    display: inline-block;
-    margin: 3px;
-    border-radius: 10px;
-    padding: 3px;
-    transition: background-color 0.5s ease;
-  }
-  .selectBlock:hover {
-    cursor: pointer;
-    background-color: #adcdff !important;
-  }
-  .selected {
-    background-color: #82b1fa;
-    display: inline-block;
-    margin: 3px;
-    border-radius: 10px;
-    padding: 3px;
-    transition: background-color 0.5s ease;
-    color: white;
-  }
-  .gen {
-    background-color: dodgerblue;
-    border: none;
-    padding: 7px;
-    border-radius: 15px;
-    color: white;
-    margin: 3px;
-    outline: none;
-    transition: background-color 0.5s ease;
-  }
-  .gen:hover {
-    background-color: #d9d9d9;
-    color: black;
-  }
-
-  .collapsible {
-    background-color: #555;
-    color: white;
-    cursor: pointer;
-    padding: 18px;
-    width: 100%;
-    border: none;
-    text-align: left;
-    outline: none;
-    font-size: 15px;
-    transition: background-color 0.5s ease;
-  }
-
-  .active,
-  .collapsible:hover {
-    background-color: #555;
-  }
-
-  .collapsible:after {
-    content: "\002B";
-    color: white;
-    font-weight: normal;
-    float: left;
-    margin-right: 10px;
-  }
-
-  .active:after {
-    content: "\2212";
-  }
-
-  .content {
-    padding: 0 18px;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
-    background-color: #f1f1f1;
-  }
-  .optionblock {
-    padding: 10px;
-    padding-bottom: 25px;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-
-  .themeName {
-    font-weight: bold;
-    display: inline-block;
-    text-indent: 0px;
-    padding-left: 0px;
-  }
-</style>
-
-<div class="sidebar">
-  <button class="collapsible" id="colordropdown">Select Theme</button>
-  <div class="content">
-    <div class="selectBlock" onclick="settheme(0)" id="1000">
-      <p>Sea Blue</p>
-      <ul id="0"></ul>
-    </div>
-
-    <div class="selectBlock" onclick="settheme(1)" id="1001">
-      <p>Dark</p>
-      <ul id="1"></ul>
-    </div>
-
-    <div class="selectBlock" onclick="settheme(2)" id="1002">
-      <p>Mint</p>
-      <ul id="2"></ul>
-    </div>
-
-    <div class="selectBlock" onclick="settheme(3)" id="1003">
-      <p>Mint Chip</p>
-      <ul id="3"></ul>
-    </div>
-
-    <div class="selectBlock" onclick="settheme(4)" id="1004">
-      <p>Rainbow</p>
-      <ul id="4"></ul>
-    </div>
-    <div class="selectBlock" onclick="settheme(5)" id="1005">
-      <p>Forest Green</p>
-      <ul id="5"></ul>
-    </div>
-    <div class="selectBlock" onclick="settheme(6)" id="1006">
-      <p>Appalachian Fall</p>
-      <ul id="6"></ul>
-    </div>
-    <div class="selectBlock" onclick="settheme(7)" id="1007">
-      <p>Pastel Sunset</p>
-      <ul id="7"></ul>
-    </div>
-    <div class="selectBlock" onclick="settheme(8)" id="1008">
-      <p>Pacific Fog</p>
-      <ul id="8"></ul>
-    </div>
-    <div class="selectBlock" onclick="settheme(9)" id="1009">
-      <p>Land Before Time</p>
-      <ul id="9"></ul>
-    </div>
-    <div class="selectBlock" onclick="settheme(10)" id="1010">
-      <p>Desert Stone</p>
-      <ul id="10"></ul>
-    </div>
-    <div class="selectBlock" onclick="settheme(11)" id="1011">
-      <p>Purple Night</p>
-      <ul id="11"></ul>
-    </div>
-    <div class="selectBlock" onclick="settheme(12)" id="1012">
-      <p>Desert Noon</p>
-      <ul id="12"></ul>
-    </div>
-    <div class="selectBlock" onclick="settheme(13)" id="1013">
-      <p>Desert Sunset</p>
-      <ul id="13"></ul>
-    </div>
-    <div class="selectBlock" onclick="settheme(14)" id="1014">
-      <p>Misty Morning</p>
-      <ul id="14"></ul>
-    </div>
-    <div class="selectBlock" onclick="settheme(15)" id="1015">
-      <p>Summer Day</p>
-      <ul id="15"></ul>
-    </div>
-  </div>
-
-  <button class="collapsible" id="colordropdown">Options</button>
-
-  <div class="content">
-    <br />
-    <div class="optionblock">
-      Gray Overlay (0 to 1):
-      <input
-        type="number"
-        step="0.01"
-        id="settings_overlay"
-        onchange="setoverlay()"
-        min="0"
-        max="1"
-      />
-    </div>
-
-    <div
-      class="optionblock"
-      style="background-color: #bddcfc"
-      id="origbox"
-      onclick="checkorig();"
-    >
-      <p class="themeName">Original:</p>
-      <input
-        type="radio"
-        id="origradio"
-        name="radiobutton"
-        value="original"
-        checked="checked"
-        onclick="setStyle();"
-      />
-      <br /><br />
-      <div id="origsettings">
-        Rows (0 to 15):
-        <input
-          type="number"
-          id="settings_rows"
-          onchange="changerows()"
-          min="1"
-          max="15"
-        />
-      </div>
-    </div>
-
-    <div class="optionblock" id="hexbox" onclick="checkhex();">
-      <p class="themeName">Hexagons:</p>
-      <input
-        type="radio"
-        id="hexradio"
-        name="radiobutton"
-        value="hexagons"
-        onchange="setStyle()"
-      />
-      <br /><br />
-      <div id="hexagonsettings">
-        Hexagon Size (10 to 200):
-        <input
-          type="number"
-          step="1"
-          id="settings_hexsize"
-          onchange="sethexsize()"
-          min="10"
-          max="200"
-        /><br /><br />
-        Color Noise (0 to 30):
-        <input
-          type="number"
-          step="1"
-          id="settings_noise"
-          onchange="setnoise()"
-          min="0"
-          max="30"
-        />
-      </div>
-    </div>
-
-    <div class="optionblock" id="wavebox" onclick="checkwave();">
-      <p class="themeName">Waves:</p>
-      <input
-        type="radio"
-        id="waveradio"
-        name="radiobutton"
-        value="waves"
-        onchange="setStyle()"
-      />
-      <br /><br />
-      Waviness (-100 to 100):
-      <input
-        type="number"
-        step="1"
-        id="settings_wave"
-        onchange="setwave()"
-        min="-1000"
-        max="1000"
-      />
-      <br /><br />
-      Slope:
-      <input
-        type="number"
-        step="1"
-        id="settings_slope"
-        onchange="setslope()"
-        min="0"
-        max="1000"
-      />
-      <br /><br />
-      Distance (-100 to 100):
-      <input
-        type="number"
-        step="1"
-        id="settings_distance"
-        onchange="setdistance()"
-        min="-1000"
-        max="1000"
-      />
-      <br /><br />
-      <!--Strata (Theme Colors):<input type="radio" id="themeradio" name="radiobutton1" value="themecol" checked="checked" onchange="setColType()"> -->
-      Use custom colors?<input
-        type="checkbox"
-        id="customradio"
-        name="radiobutton1"
-        value="customcol"
-        onchange="setColType()"
-      />
-      <br />
-      Base Color: <input id="settings_wfg" type="color" onchange="setwfg()" />
-      <br />
-      Accent Color:
-      <input id="settings_wbg" type="color" onchange="setwbg()" /> <br /><br />
-    </div>
-  </div>
-  <br />
-  <button class="gen" onclick="gen()">Generate</button>
-  <button class="gen" onclick="add()">Add</button>
-  <button class="gen" onclick="insert()">Insert As Image</button>
-  <!--<button class="gen" onclick="save()"> Save </button>-->
-  <p id="idAccountOfEffectiveUsr" style="display: none">
-    <?=Session.getEffectiveUser().getEmail()?>
-  </p>
-
-  <br />
-  <br />
-  <p>Preview</p>
-  <br />
-  <img id="preview" />
-  <br />
-  <canvas
-    id="canvas"
-    style="
-      overflow: hidden;
-      position: relative;
-      border-style: none;
-      display: none;
-    "
-  ></canvas>
-  <br />
-  <!--<br>
-    <p>Saves</p>
-    <br>-->
-</div>
-
-<script type="text/javascript">
-  var coll = document.getElementsByClassName("collapsible");
-  var i;
-
-  var style = 1;
-  function checkorig() {
-    document.getElementById("origradio").checked = true;
-    setStyle();
-  }
-  function checkhex() {
-    document.getElementById("hexradio").checked = true;
-    setStyle();
-  }
-  function checkwave() {
-    document.getElementById("waveradio").checked = true;
-    setStyle();
-  }
-
-  function setStyle() {
-    document.getElementById("origbox").style.backgroundColor = "#f1f1f1";
-    document.getElementById("hexbox").style.backgroundColor = "#f1f1f1";
-    document.getElementById("wavebox").style.backgroundColor = "#f1f1f1";
-
-    if (document.getElementById("hexradio").checked == true) {
-      document.getElementById("hexbox").style.backgroundColor = "#bddcfc";
-      style = 1;
-    } else if (document.getElementById("waveradio").checked == true) {
-      document.getElementById("wavebox").style.backgroundColor = "#bddcfc";
-      style = 3;
-    } else {
-      document.getElementById("origbox").style.backgroundColor = "#bddcfc";
-      style = 2;
-    }
-  }
-
-  for (i = 0; i < coll.length; i++) {
-    coll[i].addEventListener("click", function () {
-      this.classList.toggle("active");
-      var content = this.nextElementSibling;
-      if (content.style.maxHeight) {
-        content.style.maxHeight = null;
-      } else {
-        content.style.maxHeight = content.scrollHeight + "px";
-      }
-    });
-  }
-
-  var colors = [
-    ["#1976D2", "#607D8B", "#BBDEFB", "#2196F3", "#536DFE", "#BDBDBD"],
-    ["#FE9400", "#283339", "#19272F", "#32434A"],
-    [
-      "#9cfdd2",
-      "#c4fce9",
-      "#dce9de",
-      "#1463f5",
-      "#6ab0fc",
-      "#6c73fc",
-      "#7094c9",
-    ],
-    ["#9cfda1", "#9cfdd2", "#283339", "#19272F", "#32434A"],
-    [
-      "#B3E5FC",
-      "#0288D1",
-      "#0097A7",
-      "#D4E157",
-      "#43A047",
-      "#81C784",
-      "#FFEE58",
-      "#FF8F00",
-      "#E65100",
-    ],
-    ["#D4E157", "#43A047", "#537234", "#81C784", "#FFEE58"],
-    ["#fb4d18", "#bd2210", "#e38839", "#eda02b", "#753218", "#cf9f42"],
-    [
-      "#e88146",
-      "#fdc886",
-      "#cca3ab",
-      "#e9ac8f",
-      "#5f6595",
-      "#8d90bd",
-      "#b09fc1",
-      "#fdba00",
-      "#e55542",
-    ],
-    [
-      "#767d85",
-      "#b4bab6",
-      "#838a90",
-      "#445660",
-      "#7185a6",
-      "#717d8d",
-      "#576872",
-    ],
-    [
-      "#809342",
-      "#415019",
-      "#446c25",
-      "#385b59",
-      "#656462",
-      "#1c4922",
-      "#8392a5",
-    ],
-    [
-      "#786c65",
-      "#d0b49d",
-      "#a78e58",
-      "#4e4118",
-      "#382812",
-      "#aa9788",
-      "#836b3a",
-      "#b9b66d",
-      "#8e883c",
-      "#584f4b",
-      "#21190b",
-      "#b8aaa4",
-    ],
-    ["#30308c", "#040405", "#1a1b66", "#10114f", "#090a38", "#5c5c99"],
-    [
-      "#F58D47",
-      "#FDAC40",
-      "#DD8002",
-      "#CF7803",
-      "#F4AC4A",
-      "#FFFF00",
-      "#FDA42B",
-    ],
-    [
-      "#CF0E43",
-      "#BD0D3E",
-      "#A40B35",
-      "#8E092E",
-      "#760726",
-      "#970606",
-      "#630D84",
-    ],
-    [
-      "#F2D8BC",
-      "#FDF6D8",
-      "#D1BEA2",
-      "#B8A797",
-      "#BEB5AB",
-      "#8D877B",
-      "#9A9087",
-      "#BBB7AB",
-      "#C1C5C5",
-      "#989994",
-    ],
-    [
-      "#97CFFF",
-      "#658DC6",
-      "#76A8D8",
-      "#D8EC7E",
-      "#95B453",
-      "#C5D762",
-      "#D9E4EE",
-      "#E0E3E6",
-      "#8BBFFE",
-    ],
-  ];
-
-  var colornames = [
-    "Sea Blue",
-    "Dark",
-    "Mint",
-    "Mint Chip",
-    "Rainbow",
-    "Forest Green",
-    "Appalachian Fall",
-    "Pastel Sunset",
-    "Pacific Fog",
-    "Land Before Time",
-    "Desert Stone",
-    "Purple Night",
-    "Desert Noon",
-    "Desert Sunset",
-    "Misty Morning",
-    "Summer Day",
-  ];
-
-  var lightdark = [1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0]; //bimary array to get if text should be light or dark on theme 0 is dark, 1 light
-
-  colorpal = Math.floor(Math.random() * colors.length); //selected colors
-  var img;
-  var imgfull;
-
-  function settheme(num) {
-    document.getElementById(1000 + colorpal).classList.remove("selected");
-    document.getElementById(1000 + colorpal).classList.add("selectBlock");
-    console.log("themeset");
-    document.getElementById(1000 + num).classList.add("selected");
-    document.getElementById(1000 + num).classList.remove("selectBlock");
-    drop = document.getElementById("colordropdown");
-    drop.innerText = "Select Theme | " + colornames[num];
-    drop.click();
-    drop.style.backgroundColor = colors[num][0];
-    drop.style.color = lightdark[num] == 1 ? "white" : "black";
-
-    colorpal = num;
-    window.scrollTo(0, 0);
-  }
-
-  function displayThemes() {
-    for (var i = 0; i < colors.length; i++) {
-      var ul = document.getElementById(i);
-
-      for (var a = 0; a < colors[i].length; a++) {
-        var li = document.createElement("li");
-        li.appendChild(document.createTextNode("P"));
-        li.style.backgroundColor = colors[i][a];
-        li.style.color = colors[i][a];
-        ul.appendChild(li);
-      }
-    }
-  }
-  displayThemes();
-
-  var times = Math.round(Math.random() * 4 + 4);
-  var overlay = 0.0;
-  var size = 20;
-  var noise = 5;
-
-  //for wave
-  var slope = 10;
-  var distance = -10;
-  var waviness = 3;
-  var smoothness = 0.3;
-  var cuscol = false;
-  var wfg = "";
-  var wbg = "";
-
-  function changerows() {
-    settings = document.getElementById("settings_rows");
-    if (settings.value == "") {
-      times = Math.round(Math.random() * 4 + 4);
-      return;
-    }
-    times = settings.value;
-    if (times > 15) {
-      settings.value = 15;
-    }
-    if (times < 0) {
-      settings.value = 0;
-    }
-    times = settings.value;
-  }
-  function setoverlay() {
-    settings = document.getElementById("settings_overlay");
-    if (settings.value == "") {
-      overlay = 0.0;
-      return;
-    }
-    overlay = settings.value;
-    if (overlay > 1) {
-      settings.value = 1.0;
-    }
-    if (overlay < 0) {
-      settings.value = 0.0;
-    }
-    overlay = settings.value;
-    //      console.log('overlay'+settings.value+typeof(settings.value));
-  }
-  function sethexsize() {
-    settings = document.getElementById("settings_hexsize");
-    if (settings.value == "") {
-      size = 20;
-      return;
-    }
-    size = settings.value;
-    if (size > 200) {
-      settings.value = 200;
-    }
-    if (size < 10) {
-      settings.value = 10;
-    }
-    size = settings.value;
-  }
-  function setnoise() {
-    settings = document.getElementById("settings_noise");
-    if (settings.value == "") {
-      noise = 5;
-      return;
-    }
-    noise = settings.value;
-    if (noise > 30) {
-      settings.value = 30;
-    }
-    if (noise < 0) {
-      settings.value = 30;
-    }
-    noise = settings.value;
-  }
-  //for waves
-  function setwave() {
-    settings = document.getElementById("settings_wave");
-    if (settings.value == "") {
-      waviness = 3; //mebbe default to 8
-      return;
-    }
-    waviness = settings.value;
-    if (waviness > 100) {
-      settings.value = 100;
-    }
-    if (waviness < -100) {
-      settings.value = -100;
-    }
-    waviness = settings.value;
-  }
-
-  function setdistance() {
-    settings = document.getElementById("settings_distance");
-    if (settings.value == "") {
-      distance = -10;
-      return;
-    }
-    distance = settings.value;
-    if (distance > 1000) {
-      settings.value = 1000;
-    }
-    if (distance < -1000) {
-      settings.value = -1000;
-    }
-    distance = settings.value;
-  }
-
-  function setslope() {
-    settings = document.getElementById("settings_slope");
-    if (settings.value == "") {
-      slope = 10;
-      return;
-    }
-    slope = settings.value;
-    if (slope > 1000) {
-      settings.value = 1000;
-    }
-    if (slope < 0) {
-      settings.value = 0;
-    }
-    slope = settings.value;
-  }
-  function setColType() {
-    if (document.getElementById("customradio").checked) cuscol = true;
-    else cuscol = false;
-  }
-  function setwfg() {
-    wfg = document.getElementById("settings_wfg").value;
-  }
-  function setwbg() {
-    wbg = document.getElementById("settings_wbg").value;
-  }
-
-  ////////////////////////////////////////////////////////////////
-  function hexToRgb(hex) {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result
-      ? [
-          parseInt(result[1], 16),
-          parseInt(result[2], 16),
-          parseInt(result[3], 16),
-        ]
-      : null;
-  }
-
-  function colchange(col) {
-    if (Math.random() > 0.5) ret = col + Math.random() * noise;
-    else ret = col - Math.random() * noise;
-    if (ret > 255) ret = 255;
-    if (ret < 0) ret = 0;
-    return ret;
-  }
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-  }
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  var c = document.getElementById("canvas");
-  var ctx = c.getContext("2d");
-  c.width = 640 * 2;
-  c.height = 360 * 2;
-
-  function genorig() {
-    var c = document.getElementById("canvas");
-    var ctx = c.getContext("2d");
-    c.width = 640 * 2;
-    c.height = 360 * 2;
-    ctx.save();
-
-    ctx.shadowBlur = 20;
-    ctx.shadowColor = "rgba(0,0,0,0.85)";
-    //draw rect
-    ctx.rotate(((10 + Math.random() * 40) * Math.PI) / 180);
-
-    ctx.fillStyle =
-      colors[colorpal][Math.floor(Math.random() * colors[colorpal].length)];
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    var preX = 0; // x val of previous rectangle
-    for (i = 0; i < times; i++) {
-      var cw;
-      if (Math.random() > 0.5) {
-        cw = c.width / times + Math.random() * (c.width / times);
-      } else {
-        cw = c.width / times - Math.random() * (c.width / (times * 3));
-      }
-      var color =
-        colors[colorpal][Math.floor(Math.random() * colors[colorpal].length)];
-
-      ctx.fillStyle = color; //random colors
-      ctx.fillRect(preX, -1000, 10000, 10000);
-      preX = preX + cw;
-    }
-    if (Math.random() > 0.5) {
-      ctx.fillStyle = colors[Math.round(Math.random() * colors.length)]; //random color
-      ctx.fillRect(c.width - Math.random() * c.width - 100, -2000, 50000, 2000);
-    } else {
-      ctx.fillStyle = colors[colorpal][0]; //random color
-      var yVal = Math.random() < 0.5 ? c.height : 0;
-      if (yVal > 0) {
-        //bottom circle
-        var xVal = Math.random() < 0.5 ? c.width / 3 : c.width - c.width / 6;
-        ctx.moveTo(xVal, yVal);
-        ctx.arc(xVal, yVal, Math.random() * 100 + 500, 0, 2 * Math.PI);
-        ctx.fill();
-      } else {
-        var xVal = Math.random() < 0.5 ? c.width / 4 : c.width - c.width / 6;
-        ctx.moveTo(xVal, yVal);
-        ctx.arc(xVal, yVal, Math.random() * 100 + 400, 0, 2 * Math.PI);
-        ctx.fill();
-      }
-    }
-    //gray overlay
-    ctx.restore();
-    ctx.fillStyle = "rgba(255,255,255," + overlay + ")";
-    ctx.fillRect(0, 0, c.width, c.height);
-
-    imgfull = c.toDataURL("image/png");
-    document.getElementById("preview").src = imgfull;
-    document.getElementById("preview").style.width = "100%";
-    img = imgfull.substring(22);
-  }
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  function genhex() {
-    var c = document.getElementById("canvas");
-    var ctx = c.getContext("2d");
-    c.width = 640 * 2;
-    c.height = 360 * 2;
-
-    var x = 0;
-    var y = 0;
-    ctx.fillStyle = "gainsboro";
-
-    ctx.shadowBlur = 3;
-    ctx.shadowColor = "rgba(0,0,0,0.85)";
-    ctx.save();
-    ctx.restore();
-    ctx.fillStyle = "#bbbbbb";
-    x = 0;
-    y = 0;
-    var newcolarr = colors[colorpal].slice();
-    shuffle(newcolarr);
-
-    for (var i = 0; i < c.width / size; i++) {
-      for (var b = 0; b < c.height / size; b++) {
-        ctx.beginPath();
-        ctx.moveTo(x + size * Math.cos(0), y + size * Math.sin(0));
-
-        for (var side = 0; side < 7; side++) {
-          ctx.lineTo(
-            x + size * Math.cos((side * 2 * Math.PI) / 6),
-            y + size * Math.sin((side * 2 * Math.PI) / 6)
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top" />
+    <!-- Add any external scripts and stylesheets here -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-transition-group@4.4.2/dist/react-transition-group.min.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/gas-client@1.1.1/dist/index.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/@types/react@18.2.66/index.d.ts"
+    ></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito"
+      rel="stylesheet"
+    />
+    <script type="module" crossorigin>
+      (function (C, z, P) {
+        "use strict";
+        var A = { exports: {} },
+          W = {};
+        /**
+         * @license React
+         * react-jsx-runtime.production.min.js
+         *
+         * Copyright (c) Facebook, Inc. and its affiliates.
+         *
+         * This source code is licensed under the MIT license found in the
+         * LICENSE file in the root directory of this source tree.
+         */ var T = C,
+          U = Symbol.for("react.element"),
+          X = Symbol.for("react.fragment"),
+          Y = Object.prototype.hasOwnProperty,
+          J =
+            T.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED
+              .ReactCurrentOwner,
+          K = { key: !0, ref: !0, __self: !0, __source: !0 };
+        function L(a, o, l) {
+          var c,
+            n = {},
+            d = null,
+            g = null;
+          l !== void 0 && (d = "" + l),
+            o.key !== void 0 && (d = "" + o.key),
+            o.ref !== void 0 && (g = o.ref);
+          for (c in o) Y.call(o, c) && !K.hasOwnProperty(c) && (n[c] = o[c]);
+          if (a && a.defaultProps)
+            for (c in ((o = a.defaultProps), o))
+              n[c] === void 0 && (n[c] = o[c]);
+          return {
+            $$typeof: U,
+            type: a,
+            key: d,
+            ref: g,
+            props: n,
+            _owner: J.current,
+          };
+        }
+        (W.Fragment = X), (W.jsx = L), (W.jsxs = L), (A.exports = W);
+        var e = A.exports;
+        const D = [
+          {
+            name: "Sea Blue",
+            colors: [
+              "#1976D2",
+              "#607D8B",
+              "#BBDEFB",
+              "#2196F3",
+              "#536DFE",
+              "#BDBDBD",
+            ],
+          },
+          {
+            name: "Dark",
+            colors: ["#FE9400", "#283339", "#19272F", "#32434A"],
+          },
+          {
+            name: "Mint",
+            colors: [
+              "#9cfdd2",
+              "#c4fce9",
+              "#dce9de",
+              "#1463f5",
+              "#6ab0fc",
+              "#6c73fc",
+              "#7094c9",
+            ],
+          },
+          {
+            name: "Mint Chip",
+            colors: ["#9cfda1", "#9cfdd2", "#283339", "#19272F", "#32434A"],
+          },
+          {
+            name: "Rainbow",
+            colors: [
+              "#B3E5FC",
+              "#0288D1",
+              "#0097A7",
+              "#D4E157",
+              "#43A047",
+              "#81C784",
+              "#FFEE58",
+              "#FF8F00",
+              "#E65100",
+            ],
+          },
+          {
+            name: "Forest Green",
+            colors: ["#D4E157", "#43A047", "#537234", "#81C784", "#FFEE58"],
+          },
+          {
+            name: "Appalachian Fall",
+            colors: [
+              "#fb4d18",
+              "#bd2210",
+              "#e38839",
+              "#eda02b",
+              "#753218",
+              "#cf9f42",
+            ],
+          },
+          {
+            name: "Pastel Sunset",
+            colors: [
+              "#e88146",
+              "#fdc886",
+              "#cca3ab",
+              "#e9ac8f",
+              "#5f6595",
+              "#8d90bd",
+              "#b09fc1",
+              "#fdba00",
+              "#e55542",
+            ],
+          },
+          {
+            name: "Pacific Fog",
+            colors: [
+              "#767d85",
+              "#b4bab6",
+              "#838a90",
+              "#445660",
+              "#7185a6",
+              "#717d8d",
+              "#576872",
+            ],
+          },
+          {
+            name: "Land Before Time",
+            colors: [
+              "#809342",
+              "#415019",
+              "#446c25",
+              "#385b59",
+              "#656462",
+              "#1c4922",
+              "#8392a5",
+            ],
+          },
+          {
+            name: "Desert Stone",
+            colors: [
+              "#786c65",
+              "#d0b49d",
+              "#a78e58",
+              "#4e4118",
+              "#382812",
+              "#aa9788",
+              "#836b3a",
+              "#b9b66d",
+              "#8e883c",
+              "#584f4b",
+              "#21190b",
+              "#b8aaa4",
+            ],
+          },
+          {
+            name: "Purple Night",
+            colors: [
+              "#30308c",
+              "#040405",
+              "#1a1b66",
+              "#10114f",
+              "#090a38",
+              "#5c5c99",
+            ],
+          },
+          {
+            name: "Desert Noon",
+            colors: [
+              "#F58D47",
+              "#FDAC40",
+              "#DD8002",
+              "#CF7803",
+              "#F4AC4A",
+              "#FFFF00",
+              "#FDA42B",
+            ],
+          },
+          {
+            name: "Desert Sunset",
+            colors: [
+              "#CF0E43",
+              "#BD0D3E",
+              "#A40B35",
+              "#8E092E",
+              "#760726",
+              "#970606",
+              "#630D84",
+            ],
+          },
+          {
+            name: "Misty Morning",
+            colors: [
+              "#F2D8BC",
+              "#FDF6D8",
+              "#D1BEA2",
+              "#B8A797",
+              "#BEB5AB",
+              "#8D877B",
+              "#9A9087",
+              "#BBB7AB",
+              "#C1C5C5",
+              "#989994",
+            ],
+          },
+          {
+            name: "Summer Day",
+            colors: [
+              "#97CFFF",
+              "#658DC6",
+              "#76A8D8",
+              "#D8EC7E",
+              "#95B453",
+              "#C5D762",
+              "#D9E4EE",
+              "#E0E3E6",
+              "#8BBFFE",
+            ],
+          },
+        ];
+        function Q({ setColor: a, selectedColor: o }) {
+          return e.jsx("div", {
+            className: "flex flex-col",
+            children: D.map((l, c) =>
+              e.jsxs("div", {
+                onClick: () => a(c),
+                className: `${
+                  o === c ? "bg-blue-100" : "hover:bg-gray-100"
+                } cursor-pointer flex flex-col p-2 rounded-sm`,
+                children: [
+                  e.jsx("div", { children: l.name }),
+                  e.jsx("div", {
+                    className: "flex flex-row space-x-1",
+                    children: l.colors.map((n) =>
+                      e.jsx("div", {
+                        className: "w-5 h-5 rounded-sm",
+                        style: { backgroundColor: n },
+                      })
+                    ),
+                  }),
+                ],
+              })
+            ),
+          });
+        }
+        const { serverFunctions: _ } = new P.GASClient({
+            allowedDevelopmentDomains: (a) =>
+              /https:\/\/.*\.googleusercontent\.com$/.test(a),
+          }),
+          O = (a) => {
+            var o = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(a);
+            return o
+              ? [parseInt(o[1], 16), parseInt(o[2], 16), parseInt(o[3], 16)]
+              : null;
+          },
+          Z = (a) => {
+            const o = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(a);
+            return o
+              ? parseInt(o[1], 16) + parseInt(o[2], 16) + parseInt(o[3], 16) <
+                  (255 * 3) / 2
+              : !0;
+          },
+          B = (a, o) => {
+            var l = 0;
+            return (
+              Math.random() > 0.5
+                ? (l = a + Math.random() * o)
+                : (l = a - Math.random() * o),
+              l > 255 && (l = 255),
+              l < 0 && (l = 0),
+              l
+            );
+          },
+          V = (a) => {
+            for (let o = a.length - 1; o > 0; o--) {
+              const l = Math.floor(Math.random() * (o + 1));
+              [a[o], a[l]] = [a[l], a[o]];
+            }
+            return a;
+          };
+        function q(a, o) {
+          return (o.y - a.y) / (o.x - a.x);
+        }
+        const $ = (a, o, l, c, n, d, g, v) => {
+          console.log("wave"),
+            typeof g > "u" && (g = 0.3),
+            typeof v > "u" && (v = 0.6),
+            l.beginPath();
+          for (var u = 0, t = 0, b = 0, j = o, r = 0; r < 7; r++) {
+            let m = new Path2D();
+            m.moveTo(0, 0), m.lineTo(a[0].x, a[0].y - j * r);
+            var s = a[0];
+            s.y = s.y - j * r;
+            for (var h = 1; h < a.length; h++) {
+              var i = a[h];
+              i.y = i.y - j * r;
+              var y = a[h + 1],
+                x,
+                f;
+              y
+                ? ((u = q(s, y)), (x = (y.x - i.x) * -g), (f = x * u * v))
+                : ((x = 0), (f = 0)),
+                m.bezierCurveTo(s.x - t, s.y - b, i.x + x, i.y + f, i.x, i.y),
+                (t = x),
+                (b = f),
+                (s = i);
+            }
+            m.lineTo(1280, 0), m.lineTo(0, 0);
+            var p = c[Math.floor(Math.random() * c.length)];
+            d && (p = n), (l.fillStyle = "rgba(" + O(p) + ",0.3)"), l.fill(m);
+          }
+          l.stroke();
+        };
+        function H({
+          title: a,
+          color: o,
+          Children: l,
+          collapseOnClick: c,
+          contentHeight: n,
+        }) {
+          var u;
+          const [d, g] = C.useState(!1),
+            v = C.useRef(null);
+          return (
+            n === void 0 &&
+              (n = (u = v.current) == null ? void 0 : u.scrollHeight),
+            e.jsxs("div", {
+              children: [
+                e.jsxs("div", {
+                  className: `p-4 w-full bg-gray-100 flex flex-row space-x-2 border-b cursor-pointer ${
+                    o && Z(o) ? "text-white" : "text-black"
+                  }`,
+                  onClick: () => g(!d),
+                  style: { backgroundColor: o },
+                  children: [
+                    e.jsx("div", { className: "w-4", children: d ? "-" : "+" }),
+                    e.jsx("div", { children: a }),
+                  ],
+                }),
+                e.jsx("div", {
+                  onClick: () => {
+                    c && g(!1);
+                  },
+                  className: `overflow-hidden transition-all duration-500 ${
+                    d && "border-b"
+                  }`,
+                  ref: v,
+                  style: d ? { height: n } : { height: "0px" },
+                  children: l,
+                }),
+              ],
+            })
           );
         }
-        //color stuff
-        colidx =
-          Math.floor((i + b) / (c.width / size / newcolarr.length)) %
-          newcolarr.length;
-        colcol = newcolarr[colidx];
-        nextcol = hexToRgb(newcolarr[(colidx + 1) % newcolarr.length]);
-        diagcol = hexToRgb(colcol);
-        for (var xd = 0; xd < 3; xd++) {
-          diagcol[xd] =
-            diagcol[xd] +
-            ((nextcol[xd] - diagcol[xd]) /
-              (c.width / size / newcolarr.length)) *
-              ((i + b) % (c.width / size / newcolarr.length));
+        const G = {
+            GrayOverlay: 0,
+            Rows: 6,
+            HexagonSize: 100,
+            HexagonNoise: 0,
+            WavesWaviness: 0,
+            WavesSlope: 10,
+            WavesDistance: 20,
+            WavesCustomColor: !1,
+            WavesColor1: "#ffffff",
+            WavesColor2: "#ffffff",
+          },
+          S = (a, o, l) => (
+            Number.isNaN(a) && (a = 0), Math.max(Math.min(a, l), o)
+          );
+        function ee({
+          setOptions: a,
+          selectedType: o,
+          setSelectedType: l,
+          setHeight: c,
+        }) {
+          const [n, d] = C.useState(G),
+            g = C.useRef(null),
+            v = () => {
+              const t = { ...n },
+                b = S(parseFloat(t.GrayOverlay), 0, 1);
+              t.GrayOverlay = b;
+              const j = S(parseFloat(t.Rows), 0, 15);
+              t.Rows = j;
+              const r = S(parseFloat(t.HexagonSize), 10, 200);
+              t.HexagonSize = r;
+              const s = S(parseFloat(t.HexagonNoise), 0, 30);
+              t.HexagonNoise = s;
+              const h = S(parseFloat(t.WavesWaviness), -100, 100);
+              t.WavesWaviness = h;
+              const i = S(parseFloat(t.WavesSlope), -100, 100);
+              t.WavesSlope = i;
+              const y = S(parseFloat(t.WavesDistance), -100, 100);
+              (t.WavesDistance = y), a(t), d(t), console.log(t);
+            },
+            u = (t, b) => {
+              const j = { ...n };
+              (j[t] = b), d(j);
+            };
+          return e.jsxs("div", {
+            className: "flex flex-col space-y-2 px-1 py-4",
+            ref: g,
+            children: [
+              e.jsxs("div", {
+                className: "flex flex-row space-x-2",
+                children: [
+                  e.jsx("div", { children: "White Overlay (0 to 1): " }),
+                  " ",
+                  e.jsx("input", {
+                    type: "number",
+                    min: "0",
+                    max: "1",
+                    step: "0.1",
+                    className: "border border-gray-300 rounded-md pl-2",
+                    value: n.GrayOverlay,
+                    onChange: (t) => u("GrayOverlay", t.target.value),
+                    onBlur: () => v(),
+                  }),
+                ],
+              }),
+              e.jsxs("div", {
+                className: "space-y-1",
+                children: [
+                  e.jsx("div", {
+                    className: "font-semibold",
+                    children: "Select Background Type",
+                  }),
+                  e.jsxs("div", {
+                    className: `border border-gray-200 rounded-md p-4 py-2 gap-2 flex flex-row ${
+                      o === "original" && "bg-blue-100"
+                    }`,
+                    onClick: () => {
+                      l("original"), c(290);
+                    },
+                    children: [
+                      e.jsx("input", {
+                        type: "radio",
+                        checked: o === "original",
+                      }),
+                      e.jsx("div", { children: "Original" }),
+                    ],
+                  }),
+                  e.jsxs("div", {
+                    className: `border border-gray-200 rounded-md p-4 py-2 gap-2 flex flex-row ${
+                      o === "hexagon" && "bg-blue-100"
+                    }`,
+                    onClick: () => {
+                      l("hexagon"), c(360);
+                    },
+                    children: [
+                      e.jsx("input", {
+                        type: "radio",
+                        checked: o === "hexagon",
+                      }),
+                      e.jsx("div", { children: "Hexagon" }),
+                    ],
+                  }),
+                  e.jsxs("div", {
+                    className: `border border-gray-200 rounded-md p-4 py-2 gap-2 flex flex-row ${
+                      o === "waves" && "bg-blue-100"
+                    }`,
+                    onClick: () => {
+                      l("waves"), c(565);
+                    },
+                    children: [
+                      e.jsx("input", { type: "radio", checked: o === "waves" }),
+                      e.jsx("div", { children: "Waves" }),
+                    ],
+                  }),
+                ],
+              }),
+              o === "original" &&
+                e.jsx("div", {
+                  className: "border border-gray-200 rounded-md p-4 space-y-4 ",
+                  children: e.jsxs("div", {
+                    className: "flex flex-row space-x-2",
+                    children: [
+                      e.jsx("div", { children: "Rows (0 to 15): " }),
+                      e.jsx("input", {
+                        type: "number",
+                        min: "0",
+                        max: "15",
+                        step: "1",
+                        className: "border border-gray-300 rounded-md pl-2",
+                        value: n.Rows,
+                        onChange: (t) => u("Rows", t.target.value),
+                        onBlur: () => v(),
+                      }),
+                    ],
+                  }),
+                }),
+              o === "hexagon" &&
+                e.jsxs("div", {
+                  className: "border border-gray-200 rounded-md p-4 space-y-4",
+                  children: [
+                    e.jsxs("div", {
+                      className: "flex flex-row gap-2 flex-wrap",
+                      children: [
+                        e.jsx("div", {
+                          children: "Hexagon Size (10 to 200): ",
+                        }),
+                        " ",
+                        e.jsx("input", {
+                          type: "number",
+                          min: "0",
+                          max: "200",
+                          step: "10",
+                          className: "border border-gray-300 rounded-md pl-2",
+                          value: n.HexagonSize,
+                          onChange: (t) => u("HexagonSize", t.target.value),
+                          onBlur: () => v(),
+                        }),
+                      ],
+                    }),
+                    e.jsxs("div", {
+                      className: "flex flex-row space-x-2",
+                      children: [
+                        e.jsx("div", { children: "Color Noise (0 to 30): " }),
+                        " ",
+                        e.jsx("input", {
+                          type: "number",
+                          min: "0",
+                          max: "30",
+                          step: "1",
+                          className: "border border-gray-300 rounded-md pl-2",
+                          value: n.HexagonNoise,
+                          onChange: (t) => u("HexagonNoise", t.target.value),
+                          onBlur: () => v(),
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+              o === "waves" &&
+                e.jsxs("div", {
+                  className:
+                    "border border-gray-200 rounded-md p-4 space-y-4 mb-10",
+                  children: [
+                    e.jsxs("div", {
+                      className: "flex flex-row gap-2 flex-wrap",
+                      children: [
+                        e.jsx("div", { children: "Waviness (-100 to 100): " }),
+                        e.jsx("input", {
+                          type: "number",
+                          min: "-100",
+                          max: "100",
+                          step: "20",
+                          className: "border border-gray-300 rounded-md pl-2",
+                          value: n.WavesWaviness,
+                          onChange: (t) => u("WavesWaviness", t.target.value),
+                          onBlur: () => v(),
+                        }),
+                      ],
+                    }),
+                    e.jsxs("div", {
+                      className: "flex flex-row space-x-2",
+                      children: [
+                        e.jsx("div", { children: "Slope: " }),
+                        " ",
+                        e.jsx("input", {
+                          type: "number",
+                          min: "-200",
+                          max: "200",
+                          step: "1",
+                          className: "border border-gray-300 rounded-md pl-2",
+                          value: n.WavesSlope,
+                          onChange: (t) => u("WavesSlope", t.target.value),
+                          onBlur: () => v(),
+                        }),
+                      ],
+                    }),
+                    e.jsxs("div", {
+                      className: "flex flex-row gap-2 flex-wrap",
+                      children: [
+                        e.jsx("div", { children: "Distance (-100 to 100): " }),
+                        " ",
+                        e.jsx("input", {
+                          type: "number",
+                          min: "-100",
+                          max: "100",
+                          step: "1",
+                          className: "border border-gray-300 rounded-md pl-2",
+                          value: n.WavesDistance,
+                          onChange: (t) => u("WavesDistance", t.target.value),
+                          onBlur: () => v(),
+                        }),
+                      ],
+                    }),
+                    e.jsxs("div", {
+                      className: "flex flex-row gap-2",
+                      children: [
+                        e.jsx("input", {
+                          type: "checkbox",
+                          checked: n.WavesCustomColor,
+                          onChange: () =>
+                            u("WavesCustomColor", !n.WavesCustomColor),
+                        }),
+                        e.jsx("div", { children: "Use Custom Colors" }),
+                      ],
+                    }),
+                    e.jsxs("div", {
+                      className: "flex flex-row space-x-2",
+                      children: [
+                        e.jsx("div", { children: "Primary Color: " }),
+                        " ",
+                        e.jsx("input", {
+                          type: "color",
+                          className: "border border-gray-300 rounded-md",
+                          value: n.WavesColor1,
+                          onChange: (t) => u("WavesColor1", t.target.value),
+                          onBlur: () => v(),
+                        }),
+                      ],
+                    }),
+                    e.jsxs("div", {
+                      className: "flex flex-row space-x-2",
+                      children: [
+                        e.jsx("div", { children: "Secondary Color: " }),
+                        " ",
+                        e.jsx("input", {
+                          type: "color",
+                          className: "border border-gray-300 rounded-md",
+                          value: n.WavesColor2,
+                          onChange: (t) => u("WavesColor2", t.target.value),
+                          onBlur: () => v(),
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+            ],
+          });
         }
-        ctx.fillStyle =
-          "rgb(" +
-          colchange(diagcol[0]) +
-          "," +
-          colchange(diagcol[1]) +
-          "," +
-          colchange(diagcol[2]) +
-          ")";
-        ctx.fill();
-        y = y + size * 1.732050808;
-      }
-      x = x + size * 1.5;
-      if (i % 2 == 0) y = -size * 0.866025404;
-      else y = 0;
-    }
-    //gray overlay
-    ctx.restore();
-    ctx.fillStyle = "rgba(255,255,255," + overlay + ")";
-    ctx.fillRect(0, 0, c.width, c.height);
-
-    imgfull = c.toDataURL("image/png");
-    document.getElementById("preview").src = imgfull;
-    document.getElementById("preview").style.width = "100%";
-    img = imgfull.substring(22);
-  }
-
-  function gradient(a, b) {
-    return (b.y - a.y) / (b.x - a.x);
-  }
-
-  function bzCurve(points, f, t) {
-    console.log("wave");
-    if (typeof f == "undefined") f = 0.3; // sharpness of curve
-    if (typeof t == "undefined") t = 0.6; //built in variation // waviness
-
-    ctx.beginPath();
-
-    var m = 0;
-    var dx1 = 0;
-    var dy1 = 0;
-    var y = distance; //distance y between each curve
-    for (var a = 0; a < 7; a++) {
-      let region = new Path2D();
-      region.moveTo(0, 0);
-      region.lineTo(points[0].x, points[0].y - y * a); //line to the bottom left where curve starts
-      var preP = points[0];
-      preP.y = preP.y - y * a;
-
-      for (var i = 1; i < points.length; i++) {
-        var curP = points[i];
-        curP.y = curP.y - y * a; //move up y*a
-        nexP = points[i + 1];
-
-        if (nexP) {
-          m = gradient(preP, nexP);
-          dx2 = (nexP.x - curP.x) * -f;
-          dy2 = dx2 * m * t;
-        } else {
-          dx2 = 0;
-          dy2 = 0;
+        function k({ text: a, onClick: o }) {
+          return e.jsx("button", {
+            className: "bg-blue-100 rounded-md p-1 px-2 hover:bg-blue-300",
+            onClick: o,
+            children: a,
+          });
         }
-
-        region.bezierCurveTo(
-          preP.x - dx1,
-          preP.y - dy1,
-          curP.x + dx2,
-          curP.y + dy2,
-          curP.x,
-          curP.y
-        );
-
-        dx1 = dx2;
-        dy1 = dy2;
-        preP = curP;
+        function ae({
+          options: a,
+          currentType: o,
+          colorIndex: l,
+          addImage: c,
+          addImageSlide: n,
+        }) {
+          const [d, g] = C.useState(""),
+            v = (r) => (r === -1 ? Math.floor(Math.random() * D.length) : r),
+            u = () => {
+              var r = document.getElementById("canvas"),
+                s = r.getContext("2d");
+              (r.width = 640 * 2),
+                (r.height = 360 * 2),
+                s.save(),
+                (s.shadowBlur = 20),
+                (s.shadowColor = "rgba(0,0,0,0.85)"),
+                s.rotate(((10 + Math.random() * 40) * Math.PI) / 180);
+              const h = D[v(l)].colors;
+              (s.fillStyle = h[Math.floor(Math.random() * h.length)]),
+                s.fillRect(0, 0, r.width, r.height);
+              const i = a.Rows;
+              for (var y = 0, x = 0; x < i; x++) {
+                var f;
+                Math.random() > 0.5
+                  ? (f = r.width / i + Math.random() * (r.width / i))
+                  : (f = r.width / i - Math.random() * (r.width / (i * 3)));
+                const w = h[Math.floor(Math.random() * h.length)];
+                (s.fillStyle = w), s.fillRect(y, -1e3, 1e4, 1e4), (y = y + f);
+              }
+              if (Math.random() > 0.5)
+                (s.fillStyle = h[Math.round(Math.random() * h.length)]),
+                  s.fillRect(
+                    r.width - Math.random() * r.width - 100,
+                    -2e3,
+                    5e4,
+                    2e3
+                  );
+              else {
+                s.fillStyle = h[0];
+                var p = Math.random() < 0.5 ? r.height : 0;
+                if (p > 0) {
+                  var m =
+                    Math.random() < 0.5 ? r.width / 3 : r.width - r.width / 6;
+                  s.moveTo(m, p),
+                    s.arc(m, p, Math.random() * 100 + 500, 0, 2 * Math.PI),
+                    s.fill();
+                } else {
+                  var m =
+                    Math.random() < 0.5 ? r.width / 4 : r.width - r.width / 6;
+                  s.moveTo(m, p),
+                    s.arc(m, p, Math.random() * 100 + 400, 0, 2 * Math.PI),
+                    s.fill();
+                }
+              }
+              s.restore(),
+                (s.fillStyle = "rgba(255,255,255," + a.GrayOverlay + ")"),
+                s.fillRect(0, 0, r.width, r.height);
+              const N = r.toDataURL("image/png");
+              g(N);
+            },
+            t = () => {
+              var r = document.getElementById("canvas"),
+                s = r.getContext("2d");
+              (r.width = 640 * 2), (r.height = 360 * 2);
+              var h = 0,
+                i = 0;
+              (s.fillStyle = "gainsboro"),
+                (s.shadowBlur = 3),
+                (s.shadowColor = "rgba(0,0,0,0.85)"),
+                s.save(),
+                s.restore(),
+                (s.fillStyle = "#bbbbbb"),
+                (h = 0),
+                (i = 0);
+              var x = D[v(l)].colors.slice();
+              V(x);
+              const f = a.HexagonSize;
+              for (var p = 0; p < r.width / f; p++) {
+                for (var m = 0; m < r.height / f; m++) {
+                  s.beginPath(),
+                    s.moveTo(h + f * Math.cos(0), i + f * Math.sin(0));
+                  for (var N = 0; N < 7; N++)
+                    s.lineTo(
+                      h + f * Math.cos((N * 2 * Math.PI) / 6),
+                      i + f * Math.sin((N * 2 * Math.PI) / 6)
+                    );
+                  const M =
+                      Math.floor((p + m) / (r.width / f / x.length)) % x.length,
+                    R = x[M],
+                    se = O(x[(M + 1) % x.length]),
+                    F = O(R);
+                  for (var w = 0; w < 3; w++)
+                    F[w] =
+                      F[w] +
+                      ((se[w] - F[w]) / (r.width / f / x.length)) *
+                        ((p + m) % (r.width / f / x.length));
+                  const I = a.HexagonNoise;
+                  (s.fillStyle =
+                    "rgb(" +
+                    B(F[0], I) +
+                    "," +
+                    B(F[1], I) +
+                    "," +
+                    B(F[2], I) +
+                    ")"),
+                    s.fill(),
+                    (i = i + f * 1.732050808);
+                }
+                (h = h + f * 1.5),
+                  p % 2 == 0 ? (i = -f * 0.866025404) : (i = 0);
+              }
+              s.restore(),
+                (s.fillStyle = "rgba(255,255,255," + a.GrayOverlay + ")"),
+                s.fillRect(0, 0, r.width, r.height);
+              const E = r.toDataURL("image/png");
+              g(E);
+            },
+            b = () => {
+              var r = document.getElementById("canvas"),
+                s = r.getContext("2d");
+              (r.width = 640 * 2),
+                (r.height = 360 * 2),
+                s.clearRect(0, 0, r.width, r.height);
+              const h = D[v(l)].colors;
+              var i = h[Math.floor(Math.random() * h.length)];
+              a.WavesCustomColor == !0 && (i = a.WavesColor2),
+                (s.fillStyle = i),
+                s.fillRect(0, 0, r.width, r.height);
+              const y = 100,
+                x = a.WavesSlope;
+              for (var f = [], p = 720, m = -10, N = 400, w = 0; w < 10; w++) {
+                const M = p - Math.floor(Math.random() * y + x);
+                p = M;
+                const R = { x: m, y: M };
+                f.push(R), (m = m + N);
+              }
+              s.setLineDash([0]),
+                (s.lineWidth = 2),
+                (s.strokeStyle = "blue"),
+                $(
+                  f,
+                  a.WavesDistance,
+                  s,
+                  h,
+                  a.WavesColor1,
+                  a.WavesCustomColor,
+                  0.3,
+                  a.WavesWaviness
+                ),
+                s.restore(),
+                (s.fillStyle = "rgba(255,255,255," + a.GrayOverlay + ")"),
+                s.fillRect(0, 0, r.width, r.height);
+              const E = r.toDataURL("image/png");
+              g(E);
+            },
+            j = () => {
+              o == "waves" ? b() : o == "hexagon" ? t() : u();
+            };
+          return (
+            C.useEffect(() => {
+              n(d.substring(22));
+            }, [d]),
+            e.jsxs("div", {
+              className: "px-1 space-y-2 py-2",
+              children: [
+                e.jsxs("div", {
+                  className: "flex flex-row gap-2",
+                  children: [
+                    e.jsx("canvas", {
+                      id: "canvas",
+                      className: "overflow-hidden hidden",
+                    }),
+                    e.jsx(k, { onClick: j, text: "Generate" }),
+                    e.jsx(k, {
+                      onClick: () => n(d.substring(22)),
+                      text: "Insert",
+                    }),
+                    e.jsx(k, {
+                      onClick: () => c(d.substring(22)),
+                      text: "Insert as Image",
+                    }),
+                  ],
+                }),
+                e.jsx("div", {
+                  className: "font-semibold",
+                  children: "Preview",
+                }),
+                d && e.jsx("img", { src: d, className: "w-full md:w-1/2" }),
+              ],
+            })
+          );
+        }
+        const oe = () => {
+            const [a, o] = C.useState("original"),
+              [l, c] = C.useState(G),
+              [n, d] = C.useState(-1),
+              [g, v] = C.useState(void 0),
+              u = (b) => {
+                _.addImage(b);
+              },
+              t = (b) => {
+                _.addImageSlide(b);
+              };
+            return e.jsxs("div", {
+              children: [
+                e.jsx(H, {
+                  title: "Select Theme",
+                  Children: e.jsx(Q, {
+                    setColor: (b) => d(b),
+                    selectedColor: n,
+                  }),
+                  color: n !== -1 ? D[n].colors[0] : "",
+                  collapseOnClick: !0,
+                }),
+                e.jsx(H, {
+                  title: "Options",
+                  Children: e.jsx(ee, {
+                    options: l,
+                    setOptions: c,
+                    selectedType: a,
+                    setSelectedType: o,
+                    setHeight: v,
+                  }),
+                  update: a,
+                  contentHeight: g,
+                }),
+                e.jsx(ae, {
+                  options: l,
+                  currentType: a,
+                  colorIndex: n,
+                  addImage: u,
+                  addImageSlide: t,
+                }),
+              ],
+            });
+          },
+          re = () => e.jsx(e.Fragment, { children: e.jsx(oe, {}) });
+        z.render(e.jsx(re, {}), document.getElementById("index"));
+      })(React, ReactDOM, GASClient);
+    </script>
+    <style rel="stylesheet" crossorigin>
+      *,
+      :before,
+      :after {
+        box-sizing: border-box;
+        border-width: 0;
+        border-style: solid;
+        border-color: #e5e7eb;
       }
-      region.lineTo(1280, 0); //fill entire canvas vetically
-      region.lineTo(0, 0);
-      rgbcolor = hexToRgb(colorpal[1]);
-      fg_col =
-        colors[colorpal][Math.floor(Math.random() * colors[colorpal].length)];
-
-      if (cuscol == true) fg_col = wfg;
-      ctx.fillStyle = "rgba(" + hexToRgb(fg_col) + ",0.3)";
-      ctx.fill(region);
-    }
-    ctx.stroke();
-  }
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
-  // Generate random data
-  var variation;
-  var dy;
-
-  function genwaves() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    var bg_col =
-      colors[colorpal][Math.floor(Math.random() * colors[colorpal].length)];
-    if (cuscol == true) bg_col = wbg;
-    console.log(bg_col);
-    ctx.fillStyle = bg_col;
-    ctx.fillRect(0, 0, c.width, c.height);
-    //ctx.clearRect(0, 0, 600, 400);
-    variation = 100; //document.getElementById("variation").value;
-    dy = slope; //document.getElementById("dy").value;
-    var lines = [];
-    var prey = 720;
-    var X = -10;
-    var t = 400; // control the width of X.
-    for (var i = 0; i < 10; i++) {
-      Y = prey - Math.floor(Math.random() * variation + dy);
-      prey = Y;
-      p = { x: X, y: Y };
-      lines.push(p);
-      X = X + t;
-    }
-
-    // Draw smooth line
-    ctx.setLineDash([0]);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "blue";
-    bzCurve(lines, smoothness, waviness);
-
-    ctx.fillStyle = "rgba(255,255,255," + overlay + ")";
-    ctx.fillRect(0, 0, c.width, c.height);
-
-    imgfull = c.toDataURL("image/png");
-    document.getElementById("preview").src = imgfull;
-    document.getElementById("preview").style.width = "100%";
-    img = imgfull.substring(22);
-  }
-
-  var issue;
-  var issuemsg =
-    "Multiple Accounts Issue: This is a well-known bug Google is working to fix. See https://issuetracker.google.com/issues/69270374 for details.\nA workaround for this is to log out of all Google accounts and then log back in to the one Google account you want to use for Slides Background. You can also open an incognito window, log in, and use Slides Backgrounds from there. Thanks for your patience!";
-
-  function issuechecker(gsresponse) {
-    var usrWhoLoaded = document.getElementById(
-      "idAccountOfEffectiveUsr"
-    ).innerHTML;
-    //          console.log('issue: '+gsresponse+'-'+usrWhoLoaded);
-    if (gsresponse != usrWhoLoaded) {
-      alert(issuemsg);
-      issue = true;
-      return;
-    } else issue = false;
-    google.script.run.addImageSlide(img);
-  }
-
-  function gen() {
-    if (document.getElementById("hexradio").checked == true) genhex();
-    else if (document.getElementById("waveradio").checked == true) genwaves();
-    else genorig();
-    //      while(img == null || img.length < 10)
-    //      {
-    //        genimage();
-    //        console.log("fin genimage()");
-    //      }
-    if (issue == null)
-      google.script.run
-        .withSuccessHandler(issuechecker)
-        .checkMultipleAccountIssue(); //runs issuechecker, which adds the image if no issue
-    else if (issue == true) {
-      alert(issuemsg);
-      return;
-    } else google.script.run.addImageSlide(img);
-  }
-
-  function insert() {
-    if (img == null) {
-      alert("Please click Generate first.");
-      return;
-    }
-    if (issue == true) {
-      alert(issuemsg);
-      return;
-    }
-    google.script.run.addImage(img);
-  }
-
-  function add() {
-    if (img == null) {
-      alert("Please click Generate first.");
-      return;
-    }
-    if (issue == true) {
-      alert(issuemsg);
-      return;
-    }
-    google.script.run.addImageSlide(img);
-  }
-
-  function addsave(id) {
-    //save code
-    console.log(id);
-    var tempimg = document.getElementById(id).src;
-
-    tempimg = tempimg.substring(22);
-    google.script.run.addImageSlide(tempimg);
-  }
-
-  var savedid = 100; //id of saved image
-
-  function save() {
-    if (img == null) {
-      alert("Please click Generate first.");
-      return;
-    }
-    if (issue == true) {
-      alert(issuemsg);
-      return;
-    }
-    var saved = document.createElement("img");
-    saved.src = imgfull;
-    saved.style.width = "100%";
-    saved.id = savedid;
-    document.body.appendChild(saved);
-
-    var buttonadd = document.createElement("input");
-    buttonadd.type = "button";
-    buttonadd.value = "add";
-    buttonadd.id = savedid + 1000;
-    buttonadd.classList.add("gen");
-    buttonadd.onclick = function () {
-      addsave(this.id - 1000);
-    };
-    document.body.appendChild(buttonadd);
-    var brr = document.createElement("BR");
-    document.body.appendChild(brr);
-    savedid++;
-  }
-
-  //thanks for trying slides background!
-</script>
+      :before,
+      :after {
+        --tw-content: "";
+      }
+      html,
+      :host {
+        line-height: 1.5;
+        -webkit-text-size-adjust: 100%;
+        -moz-tab-size: 4;
+        -o-tab-size: 4;
+        tab-size: 4;
+        font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+          "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+        font-feature-settings: normal;
+        font-variation-settings: normal;
+        -webkit-tap-highlight-color: transparent;
+      }
+      body {
+        margin: 0;
+        line-height: inherit;
+      }
+      hr {
+        height: 0;
+        color: inherit;
+        border-top-width: 1px;
+      }
+      abbr:where([title]) {
+        -webkit-text-decoration: underline dotted;
+        text-decoration: underline dotted;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-size: inherit;
+        font-weight: inherit;
+      }
+      a {
+        color: inherit;
+        text-decoration: inherit;
+      }
+      b,
+      strong {
+        font-weight: bolder;
+      }
+      code,
+      kbd,
+      samp,
+      pre {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          Liberation Mono, Courier New, monospace;
+        font-feature-settings: normal;
+        font-variation-settings: normal;
+        font-size: 1em;
+      }
+      small {
+        font-size: 80%;
+      }
+      sub,
+      sup {
+        font-size: 75%;
+        line-height: 0;
+        position: relative;
+        vertical-align: baseline;
+      }
+      sub {
+        bottom: -0.25em;
+      }
+      sup {
+        top: -0.5em;
+      }
+      table {
+        text-indent: 0;
+        border-color: inherit;
+        border-collapse: collapse;
+      }
+      button,
+      input,
+      optgroup,
+      select,
+      textarea {
+        font-family: inherit;
+        font-feature-settings: inherit;
+        font-variation-settings: inherit;
+        font-size: 100%;
+        font-weight: inherit;
+        line-height: inherit;
+        letter-spacing: inherit;
+        color: inherit;
+        margin: 0;
+        padding: 0;
+      }
+      button,
+      select {
+        text-transform: none;
+      }
+      button,
+      input:where([type="button"]),
+      input:where([type="reset"]),
+      input:where([type="submit"]) {
+        -webkit-appearance: button;
+        background-color: transparent;
+        background-image: none;
+      }
+      :-moz-focusring {
+        outline: auto;
+      }
+      :-moz-ui-invalid {
+        box-shadow: none;
+      }
+      progress {
+        vertical-align: baseline;
+      }
+      ::-webkit-inner-spin-button,
+      ::-webkit-outer-spin-button {
+        height: auto;
+      }
+      [type="search"] {
+        -webkit-appearance: textfield;
+        outline-offset: -2px;
+      }
+      ::-webkit-search-decoration {
+        -webkit-appearance: none;
+      }
+      ::-webkit-file-upload-button {
+        -webkit-appearance: button;
+        font: inherit;
+      }
+      summary {
+        display: list-item;
+      }
+      blockquote,
+      dl,
+      dd,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      hr,
+      figure,
+      p,
+      pre {
+        margin: 0;
+      }
+      fieldset {
+        margin: 0;
+        padding: 0;
+      }
+      legend {
+        padding: 0;
+      }
+      ol,
+      ul,
+      menu {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      dialog {
+        padding: 0;
+      }
+      textarea {
+        resize: vertical;
+      }
+      input::-moz-placeholder,
+      textarea::-moz-placeholder {
+        opacity: 1;
+        color: #9ca3af;
+      }
+      input::placeholder,
+      textarea::placeholder {
+        opacity: 1;
+        color: #9ca3af;
+      }
+      button,
+      [role="button"] {
+        cursor: pointer;
+      }
+      :disabled {
+        cursor: default;
+      }
+      img,
+      svg,
+      video,
+      canvas,
+      audio,
+      iframe,
+      embed,
+      object {
+        display: block;
+        vertical-align: middle;
+      }
+      img,
+      video {
+        max-width: 100%;
+        height: auto;
+      }
+      [hidden] {
+        display: none;
+      }
+      *,
+      :before,
+      :after {
+        --tw-border-spacing-x: 0;
+        --tw-border-spacing-y: 0;
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+        --tw-pan-x: ;
+        --tw-pan-y: ;
+        --tw-pinch-zoom: ;
+        --tw-scroll-snap-strictness: proximity;
+        --tw-gradient-from-position: ;
+        --tw-gradient-via-position: ;
+        --tw-gradient-to-position: ;
+        --tw-ordinal: ;
+        --tw-slashed-zero: ;
+        --tw-numeric-figure: ;
+        --tw-numeric-spacing: ;
+        --tw-numeric-fraction: ;
+        --tw-ring-inset: ;
+        --tw-ring-offset-width: 0px;
+        --tw-ring-offset-color: #fff;
+        --tw-ring-color: rgb(59 130 246 / 0.5);
+        --tw-ring-offset-shadow: 0 0 #0000;
+        --tw-ring-shadow: 0 0 #0000;
+        --tw-shadow: 0 0 #0000;
+        --tw-shadow-colored: 0 0 #0000;
+        --tw-blur: ;
+        --tw-brightness: ;
+        --tw-contrast: ;
+        --tw-grayscale: ;
+        --tw-hue-rotate: ;
+        --tw-invert: ;
+        --tw-saturate: ;
+        --tw-sepia: ;
+        --tw-drop-shadow: ;
+        --tw-backdrop-blur: ;
+        --tw-backdrop-brightness: ;
+        --tw-backdrop-contrast: ;
+        --tw-backdrop-grayscale: ;
+        --tw-backdrop-hue-rotate: ;
+        --tw-backdrop-invert: ;
+        --tw-backdrop-opacity: ;
+        --tw-backdrop-saturate: ;
+        --tw-backdrop-sepia: ;
+        --tw-contain-size: ;
+        --tw-contain-layout: ;
+        --tw-contain-paint: ;
+        --tw-contain-style: ;
+      }
+      ::backdrop {
+        --tw-border-spacing-x: 0;
+        --tw-border-spacing-y: 0;
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+        --tw-pan-x: ;
+        --tw-pan-y: ;
+        --tw-pinch-zoom: ;
+        --tw-scroll-snap-strictness: proximity;
+        --tw-gradient-from-position: ;
+        --tw-gradient-via-position: ;
+        --tw-gradient-to-position: ;
+        --tw-ordinal: ;
+        --tw-slashed-zero: ;
+        --tw-numeric-figure: ;
+        --tw-numeric-spacing: ;
+        --tw-numeric-fraction: ;
+        --tw-ring-inset: ;
+        --tw-ring-offset-width: 0px;
+        --tw-ring-offset-color: #fff;
+        --tw-ring-color: rgb(59 130 246 / 0.5);
+        --tw-ring-offset-shadow: 0 0 #0000;
+        --tw-ring-shadow: 0 0 #0000;
+        --tw-shadow: 0 0 #0000;
+        --tw-shadow-colored: 0 0 #0000;
+        --tw-blur: ;
+        --tw-brightness: ;
+        --tw-contrast: ;
+        --tw-grayscale: ;
+        --tw-hue-rotate: ;
+        --tw-invert: ;
+        --tw-saturate: ;
+        --tw-sepia: ;
+        --tw-drop-shadow: ;
+        --tw-backdrop-blur: ;
+        --tw-backdrop-brightness: ;
+        --tw-backdrop-contrast: ;
+        --tw-backdrop-grayscale: ;
+        --tw-backdrop-hue-rotate: ;
+        --tw-backdrop-invert: ;
+        --tw-backdrop-opacity: ;
+        --tw-backdrop-saturate: ;
+        --tw-backdrop-sepia: ;
+        --tw-contain-size: ;
+        --tw-contain-layout: ;
+        --tw-contain-paint: ;
+        --tw-contain-style: ;
+      }
+      .mb-10 {
+        margin-bottom: 2.5rem;
+      }
+      .flex {
+        display: flex;
+      }
+      .hidden {
+        display: none;
+      }
+      .h-5 {
+        height: 1.25rem;
+      }
+      .w-4 {
+        width: 1rem;
+      }
+      .w-5 {
+        width: 1.25rem;
+      }
+      .w-full {
+        width: 100%;
+      }
+      .cursor-pointer {
+        cursor: pointer;
+      }
+      .flex-row {
+        flex-direction: row;
+      }
+      .flex-col {
+        flex-direction: column;
+      }
+      .flex-wrap {
+        flex-wrap: wrap;
+      }
+      .gap-2 {
+        gap: 0.5rem;
+      }
+      .space-x-1 > :not([hidden]) ~ :not([hidden]) {
+        --tw-space-x-reverse: 0;
+        margin-right: calc(0.25rem * var(--tw-space-x-reverse));
+        margin-left: calc(0.25rem * calc(1 - var(--tw-space-x-reverse)));
+      }
+      .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+        --tw-space-x-reverse: 0;
+        margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+        margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+      }
+      .space-y-1 > :not([hidden]) ~ :not([hidden]) {
+        --tw-space-y-reverse: 0;
+        margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
+        margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
+      }
+      .space-y-2 > :not([hidden]) ~ :not([hidden]) {
+        --tw-space-y-reverse: 0;
+        margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+        margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
+      }
+      .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+        --tw-space-y-reverse: 0;
+        margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+        margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+      }
+      .overflow-hidden {
+        overflow: hidden;
+      }
+      .rounded-md {
+        border-radius: 0.375rem;
+      }
+      .rounded-sm {
+        border-radius: 0.125rem;
+      }
+      .border {
+        border-width: 1px;
+      }
+      .border-b {
+        border-bottom-width: 1px;
+      }
+      .border-gray-200 {
+        --tw-border-opacity: 1;
+        border-color: rgb(229 231 235 / var(--tw-border-opacity));
+      }
+      .border-gray-300 {
+        --tw-border-opacity: 1;
+        border-color: rgb(209 213 219 / var(--tw-border-opacity));
+      }
+      .bg-blue-100 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(219 234 254 / var(--tw-bg-opacity));
+      }
+      .bg-gray-100 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+      }
+      .p-1 {
+        padding: 0.25rem;
+      }
+      .p-2 {
+        padding: 0.5rem;
+      }
+      .p-4 {
+        padding: 1rem;
+      }
+      .px-1 {
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+      }
+      .px-2 {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+      .py-2 {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
+      .py-4 {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+      }
+      .pl-2 {
+        padding-left: 0.5rem;
+      }
+      .font-semibold {
+        font-weight: 600;
+      }
+      .text-black {
+        --tw-text-opacity: 1;
+        color: rgb(0 0 0 / var(--tw-text-opacity));
+      }
+      .text-white {
+        --tw-text-opacity: 1;
+        color: rgb(255 255 255 / var(--tw-text-opacity));
+      }
+      .transition-all {
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 0.15s;
+      }
+      .duration-500 {
+        transition-duration: 0.5s;
+      }
+      .sheetNames-enter {
+        opacity: 0;
+      }
+      .sheetNames-enter.sheetNames-enter-active {
+        opacity: 1;
+        transition: opacity 0.3s ease-in;
+      }
+      .sheetNames-exit {
+        opacity: 1;
+      }
+      .sheetNames-exit.sheetNames-exit-active {
+        opacity: 0;
+        transition: opacity 0.3s ease-in;
+      }
+      .sheetNames-appear {
+        opacity: 0;
+      }
+      .sheetNames-appear.sheetNames-appear-active {
+        opacity: 1;
+        transition: opacity 0.5ms ease-in;
+      }
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #616161;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+      .hover\:bg-blue-300:hover {
+        --tw-bg-opacity: 1;
+        background-color: rgb(147 197 253 / var(--tw-bg-opacity));
+      }
+      .hover\:bg-gray-100:hover {
+        --tw-bg-opacity: 1;
+        background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+      }
+      @media (min-width: 768px) {
+        .md\:w-1\/2 {
+          width: 50%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section id="index">
+      <!-- bundled js and css will get inlined here during build -->
+    </section>
+  </body>
+</html>
